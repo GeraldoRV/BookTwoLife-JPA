@@ -1,0 +1,11 @@
+.button{
+    display: inline;
+}
+.group-item{
+    display: flex;
+}
+.data{
+    width: 70%;
+    padding-left: 2%;
+    height: 43%;
+}
