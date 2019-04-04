@@ -5,13 +5,18 @@
  */
 package controller;
 
+import ejb.BookFacade;
+import ejb.CartFacade;
+import entities.Buyer;
+import entities.Cart;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpSession;
 import model.Book;
-import model.Cart;
 
 /**
  *
@@ -25,10 +30,8 @@ public class AddToCartCommand extends FrontCommand {
     public void process() {
         session = request.getSession(true);
 
-        String idBook = request.getParameter("name");
-        Cart cart = getCart();
-
-        addBookIn(cart, idBook);
+        String idBook = request.getParameter("id");
+        saveInCart(idBook);
 
         try {
             forward("/views/buyer/main.jsp");
@@ -38,42 +41,27 @@ public class AddToCartCommand extends FrontCommand {
 
     }
 
-    private Cart getCart() {
-        Cart cart;
-        if (session.isNew()) {
-            cart = createCart();
-            session.setAttribute("cart", cart);
-
-        } else {
-            if (session.getAttribute("cart") == null) {
-                cart = createCart();
-            } else {
-
-                cart = (Cart) session.getAttribute("cart");
-            }
-        }
-        return cart;
-    }
-
-    private Cart createCart() {
-        return new Cart();
-    }
-
-    private void saveInSession(Cart cart) {
-        session.setAttribute("cart", cart);
-    }
-
-    private void addBookIn(Cart cart, String id) {
-        if (id != null && !id.isEmpty()) {
-            Book book = findBook(id);
-            cart.addBook(book);
-            saveInSession(cart);
+    private void saveInCart(String idBook) {
+        Buyer buyer = (Buyer) session.getAttribute("userlogin");
+        try {
+            BookFacade bf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/BookFacade!ejb.BookFacade");
+            Cart cart = buyer.getCart();
+            bf.addToCart(cart, Integer.parseInt(idBook));
+            updatePrice(cart);
+        } catch (NamingException ex) {
+            Logger.getLogger(AddToCartCommand.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private Book findBook(String id) {
-        Book book = new Book();
-        book = book.find(id);
-        return book;
+    private void updatePrice(Cart cart) {
+        try {
+            CartFacade cf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/CartFacade!ejb.CartFacade");
+            String price = request.getParameter("price");
+            double priceBook = Double.parseDouble(price);
+            cf.updateFullPrice(priceBook, cart.getId());
+        } catch (NamingException ex) {
+            Logger.getLogger(AddToCartCommand.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
+
 }

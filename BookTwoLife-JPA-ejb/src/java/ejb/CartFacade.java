@@ -5,6 +5,7 @@
  */
 package ejb;
 
+import entities.Buyer;
 import entities.Cart;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -29,4 +30,9 @@ public class CartFacade extends AbstractFacade<Cart> {
         super(Cart.class);
     }
     
+    public void updateFullPrice(Double price,Integer idCart){
+        em.createQuery("UPDATE Cart c SET c.fullPrice = c.fullPrice + :price WHERE c.id = :id")
+                .setParameter("price", price)
+                .setParameter("id", idCart);
+    }
 }

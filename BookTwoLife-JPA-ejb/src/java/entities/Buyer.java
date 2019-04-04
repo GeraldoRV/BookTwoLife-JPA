@@ -6,11 +6,13 @@
 package entities;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -39,8 +41,8 @@ public class Buyer implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "ID")
     private Integer id;
     @Basic(optional = false)
@@ -57,7 +59,7 @@ public class Buyer implements Serializable {
     @Column(name = "PASSWORD")
     private String password;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idBuyer")
-    private Collection<Solicitude> solicitudeCollection;
+    private List<Solicitude> solicitudeList;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "buyer")
     private Cart cart;
 
@@ -107,12 +109,12 @@ public class Buyer implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Solicitude> getSolicitudeCollection() {
-        return solicitudeCollection;
+    public List<Solicitude> getSolicitudeList() {
+        return solicitudeList;
     }
 
-    public void setSolicitudeCollection(Collection<Solicitude> solicitudeCollection) {
-        this.solicitudeCollection = solicitudeCollection;
+    public void setSolicitudeList(List<Solicitude> solicitudeList) {
+        this.solicitudeList = solicitudeList;
     }
 
     public Cart getCart() {

@@ -6,6 +6,8 @@
 package ejb;
 
 import entities.Book;
+import entities.Cart;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -29,4 +31,15 @@ public class BookFacade extends AbstractFacade<Book> {
         super(Book.class);
     }
     
+    public List<Book> findWhereNotCart(){
+       return em.createQuery("SELECT b FROM Book b "
+                + "WHERE b.idCart IS NULL AND b.idSolicitude IS NULL")
+                .getResultList();
+    }
+    
+    public void addToCart(Cart idCart,Integer idBook){
+        em.createQuery("UPDATE Book b SET b.idCart =:idCart WHERE b.id =:id")
+                .setParameter("idCart", idCart)
+                .setParameter("id", idBook).executeUpdate();
+    }
 }

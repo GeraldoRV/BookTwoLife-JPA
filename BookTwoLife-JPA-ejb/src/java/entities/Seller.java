@@ -6,11 +6,13 @@
 package entities;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -38,8 +40,8 @@ public class Seller implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "ID")
     private Integer id;
     @Basic(optional = false)
@@ -56,9 +58,9 @@ public class Seller implements Serializable {
     @Column(name = "PASSWORD")
     private String password;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idSeller")
-    private Collection<Book> bookCollection;
+    private List<Book> bookList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idSeller")
-    private Collection<Solicitude> solicitudeCollection;
+    private List<Solicitude> solicitudeList;
 
     public Seller() {
     }
@@ -106,21 +108,21 @@ public class Seller implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Book> getBookCollection() {
-        return bookCollection;
+    public List<Book> getBookList() {
+        return bookList;
     }
 
-    public void setBookCollection(Collection<Book> bookCollection) {
-        this.bookCollection = bookCollection;
+    public void setBookList(List<Book> bookList) {
+        this.bookList = bookList;
     }
 
     @XmlTransient
-    public Collection<Solicitude> getSolicitudeCollection() {
-        return solicitudeCollection;
+    public List<Solicitude> getSolicitudeList() {
+        return solicitudeList;
     }
 
-    public void setSolicitudeCollection(Collection<Solicitude> solicitudeCollection) {
-        this.solicitudeCollection = solicitudeCollection;
+    public void setSolicitudeList(List<Solicitude> solicitudeList) {
+        this.solicitudeList = solicitudeList;
     }
 
     @Override

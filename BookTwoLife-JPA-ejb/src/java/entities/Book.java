@@ -9,6 +9,8 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -37,8 +39,8 @@ public class Book implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "ID")
     private Integer id;
     @Basic(optional = false)
@@ -55,7 +57,7 @@ public class Book implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "PRICE")
     private Double price;
-    @JoinColumn(name = "ID_CART", referencedColumnName = "ID_USER")
+    @JoinColumn(name = "ID_CART", referencedColumnName = "ID")
     @ManyToOne
     private Cart idCart;
     @JoinColumn(name = "ID_SELLER", referencedColumnName = "ID")

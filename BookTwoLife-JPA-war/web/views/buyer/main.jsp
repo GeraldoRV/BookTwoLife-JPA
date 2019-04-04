@@ -4,6 +4,11 @@
     Author     : Geraldo
 --%>
 
+<%@page import="entities.Book"%>
+<%@page import="java.util.List"%>
+
+<%@page import="javax.naming.InitialContext"%>
+<%@page import="ejb.BookFacade"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -15,16 +20,23 @@
     </head>
     <body>
         <jsp:include page="partials/navbar.jsp" />
+        <%
+        BookFacade bf= InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/BookFacade!ejb.BookFacade");
+        List<Book> books =bf.findWhereNotCart();
+        %>
         <div class="container py-2">
             <ul class="list-group">
+                <%
+                for (Book book : books) {
+                        
+                    
+                %>
                 <li class="list-group-item group-item">
-                    <div class="image"><img src="/BookTwoLife/images/princ.jpg" width="80"  alt="princ"/></div>
+                    <div class="image"><img src="/BookTwoLife-JPA-war/images/princ.jpg" width="80"  alt="princ"/></div>
                     <div class="data">
-                        <h5>El Principito</h5> 
-                        <p>El principito es un cuento poético que viene acompañado
-                            de ilustraciones hechas con acuarelas por el mismo Saint-Exupéry. 
-                            En él, un piloto se encuentra perdido...</p>
-                        <small>3 €</small>
+                        <h5><%=book.getBname()%></h5> 
+                        <p><%=book.getDescription()%></p>
+                        <small><%=book.getPrice()%> €</small>
 
                     </div>
                     <div class="button">
@@ -33,55 +45,17 @@
                             <input type="hidden" name="name" value="Principito">
                             <button type="submit" class="btn btn-outline-warning">Ver detalles</button>
                         </form>
-                        <form action="/BookTwoLife/FrontController">                   
+                        <form action="/BookTwoLife-JPA-war/FrontController">                   
                             <input type="hidden" name="command" value="AddToCartCommand">
                             <input type="hidden" name="name" value="Principito">
+                            <input type="hidden" name="id" value="<%=Integer.toString(book.getId())%>">
+                            <input type="hidden" name="price" value="<%=Double.toString(book.getPrice())%>">
                             <button type="submit" class="btn btn-warning">Añadir al carrito</button>
                         </form>
                     </div>
                 </li>
-                <li class="list-group-item group-item">
-                    <div class="image"><img src="/BookTwoLife/images/quijote.jpg" width="80"  alt="princ"/></div>
-                    <div class="data">
-                        <h5>Don Quijote</h5> 
-                        <p>En un lugar de la mancha...</p>
-                        <small>3 €</small>
-                    </div>
-                    <div class="button">
-
-                        <form action="/BookTwoLife/FrontController">                   
-                            <input type="hidden" name="command" value="TransformViewCommand">
-                            <input type="hidden" name="name" value="Quijote">
-                            <button type="submit" class="btn btn-outline-warning">Ver detalles</button>
-                        </form>
-                        <form action="/BookTwoLife/FrontController">                   
-                            <input type="hidden" name="command" value="AddToCartCommand">
-                            <input type="hidden" name="name" value="Quijote">
-                            <button type="submit" class="btn btn-warning">Añadir al carrito</button>
-                        </form>
-                    </div>
-                </li>
-                <li class="list-group-item group-item">
-                    <div class="image"><img src="/BookTwoLife/images/sombras.jpg" width="80"  alt="princ"/></div>
-                    <div class="data">
-                        <h5>50 Sombras de Gray</h5> 
-                        <p>+ 18</p>
-                        <small>3 €</small>
-                    </div>
-                    <div class="button">
-                        <form action="/BookTwoLife/FrontController">                   
-                            <input type="hidden" name="command" value="TransformViewCommand">
-                            <input type="hidden" name="name" value="Sombras">
-                            <button type="submit" class="btn btn-outline-warning">Ver detalles</button>
-                        </form>
-                        <form action="/BookTwoLife/FrontController">                   
-                            <input type="hidden" name="command" value="AddToCartCommand">
-                            <input type="hidden" name="name" value="Sombras">
-                            <button type="submit" class="btn btn-warning">Añadir al carrito</button>
-                        </form>
-
-                    </div>
-                </li>
+                <%}%>
+                
             </ul>
         </div>
     </body>
