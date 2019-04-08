@@ -22,8 +22,13 @@
       </li>
     </ul>
       <form action="/BookTwoLife-JPA-war/FrontController" class="form-inline mx-auto">
-            <input class="form-control mr-sm-2" type="search" placeholder="Busquemos un libro..." aria-label="libro">
+            <input class="form-control mr-sm-2" name="name" type="search" placeholder="Busquemos un libro..." aria-label="libro">
             <input type="hidden" name="command" value="FindBooKCommand">
+            <button class="btn btn-outline-warning my-2 my-sm-0" type="submit"><i class="fas fa-search"></i> Buscar</button>
+        </form>
+      <form action="/BookTwoLife-JPA-war/FrontController" class="form-inline">
+            <input class="form-control mr-sm-2" name="name" type="search" placeholder="Busquemos un libro(C)..." aria-label="libro">
+            <input type="hidden" name="command" value="FindBooKCriteriaCommand">
             <button class="btn btn-outline-warning my-2 my-sm-0" type="submit"><i class="fas fa-search"></i> Buscar</button>
         </form>
   </div>

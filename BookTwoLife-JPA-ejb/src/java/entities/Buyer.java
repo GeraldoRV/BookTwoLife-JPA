@@ -17,7 +17,6 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -60,8 +59,8 @@ public class Buyer implements Serializable {
     private String password;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idBuyer")
     private List<Solicitude> solicitudeList;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "buyer")
-    private Cart cart;
+    @OneToMany(mappedBy = "idUser")
+    private List<Cart> cartList;
 
     public Buyer() {
     }
@@ -117,12 +116,13 @@ public class Buyer implements Serializable {
         this.solicitudeList = solicitudeList;
     }
 
-    public Cart getCart() {
-        return cart;
+    @XmlTransient
+    public List<Cart> getCartList() {
+        return cartList;
     }
 
-    public void setCart(Cart cart) {
-        this.cart = cart;
+    public void setCartList(List<Cart> cartList) {
+        this.cartList = cartList;
     }
 
     @Override

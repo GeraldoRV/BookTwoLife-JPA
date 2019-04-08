@@ -57,7 +57,7 @@ public class Book implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "PRICE")
     private Double price;
-    @JoinColumn(name = "ID_CART", referencedColumnName = "ID")
+    @JoinColumn(name = "ID_CART", referencedColumnName = "ID_USER")
     @ManyToOne
     private Cart idCart;
     @JoinColumn(name = "ID_SELLER", referencedColumnName = "ID")

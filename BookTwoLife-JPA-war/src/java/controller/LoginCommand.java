@@ -49,21 +49,17 @@ public class LoginCommand extends FrontCommand {
         } catch (NamingException ex) {
             Logger.getLogger(LoginCommand.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if (buyer != null) {
-            saveInSession(buyer);
-            setCart(buyer);
+        try {
+            if (buyer != null) {
+                saveInSession(buyer);
+                setCart(buyer);
 
-            try {
                 forward("/views/buyer/main.jsp");
-            } catch (ServletException | IOException ex) {
-                Logger.getLogger(LoginCommand.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else {
-            try {
+            } else {
                 forward("/index.jsp");
-            } catch (ServletException | IOException ex) {
-                Logger.getLogger(LoginCommand.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } catch (ServletException | IOException ex) {
+            Logger.getLogger(LoginCommand.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -75,19 +71,15 @@ public class LoginCommand extends FrontCommand {
         } catch (NamingException ex) {
             Logger.getLogger(LoginCommand.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if (seller != null) {
-            saveInSession(seller);
-            try {
+        try {
+            if (seller != null) {
+                saveInSession(seller);
                 forward("/views/seller/main.jsp");
-            } catch (ServletException | IOException ex) {
-                Logger.getLogger(LoginCommand.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else {
-            try {
+            } else {
                 forward("/index.jsp");
-            } catch (ServletException | IOException ex) {
-                Logger.getLogger(LoginCommand.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } catch (ServletException | IOException ex) {
+            Logger.getLogger(LoginCommand.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -98,12 +90,16 @@ public class LoginCommand extends FrontCommand {
     }
 
     private void setCart(Buyer buyer) {
-        if (buyer.getCart() == null) {
+        if (buyer.getCartList().isEmpty()) {
             try {
                 Cart cart = new Cart();
-                cart.setBuyer(buyer);
+                cart.setIdUser(buyer);
+                cart.setFullPrice(0.);
                 CartFacade cf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/CartFacade!ejb.CartFacade");
                 cf.create(cart);
+                BuyerFacade bf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/BuyerFacade!ejb.BuyerFacade");
+                buyer = bf.find(buyer.getId());
+
             } catch (NamingException ex) {
                 Logger.getLogger(LoginCommand.class.getName()).log(Level.SEVERE, null, ex);
             }

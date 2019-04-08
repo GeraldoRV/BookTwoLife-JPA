@@ -33,6 +33,6 @@ public class CartFacade extends AbstractFacade<Cart> {
     public void updateFullPrice(Double price,Integer idCart){
         em.createQuery("UPDATE Cart c SET c.fullPrice = c.fullPrice + :price WHERE c.id = :id")
                 .setParameter("price", price)
-                .setParameter("id", idCart);
+                .setParameter("id", idCart).executeUpdate();
     }
 }

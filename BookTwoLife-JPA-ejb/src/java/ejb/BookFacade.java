@@ -11,6 +11,11 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.ParameterExpression;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -30,16 +35,50 @@ public class BookFacade extends AbstractFacade<Book> {
     public BookFacade() {
         super(Book.class);
     }
-    
-    public List<Book> findWhereNotCart(){
-       return em.createQuery("SELECT b FROM Book b "
+
+    public List<Book> findWhereNotCart() {
+        return em.createQuery("SELECT b FROM Book b "
                 + "WHERE b.idCart IS NULL AND b.idSolicitude IS NULL")
                 .getResultList();
     }
-    
-    public void addToCart(Cart idCart,Integer idBook){
+
+    public void addToCart(Cart idCart, Integer idBook) {
         em.createQuery("UPDATE Book b SET b.idCart =:idCart WHERE b.id =:id")
                 .setParameter("idCart", idCart)
                 .setParameter("id", idBook).executeUpdate();
+    }
+
+    public void createBook(String name, String description, String genre, double price, Integer seller) {
+        em.createNativeQuery("INSERT INTO BOOK (BNAME,DESCRIPTION,GENRE,PRICE,ID_SELLER) VALUES(?, ?,?,?,?)")
+                .setParameter(1, name)
+                .setParameter(2, description)
+                .setParameter(3, genre)
+                .setParameter(4, price)
+                .setParameter(5, seller)
+                .executeUpdate();
+    }
+
+    public List<Book> findByName(String name,int index) {
+        return em.createQuery("SELECT b FROM Book b WHERE b.idCart IS NULL AND b.idSolicitude IS NULL AND b.bname LIKE :name ORDER BY b.price").setMaxResults(2)
+                .setParameter("name", "%" + name + "%")
+                .setFirstResult(index)
+                .setMaxResults(3)
+                .getResultList();
+
+    }
+
+    public List<Book> findByNameCriteria(String name) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Book> cq = cb.createQuery(Book.class);
+        Root<Book> book = cq.from(Book.class);
+        ParameterExpression<String> p = cb.parameter(String.class);
+
+        cq.select(book).where(cb.like(book.get("bname"), p),
+                cb.isNull(book.get("idCart")),
+                cb.isNull(book.get("idSolicitude")));
+
+        TypedQuery<Book> q = em.createQuery(cq);
+        q.setParameter(p, "%" + name + "%");
+        return q.getResultList();
     }
 }

@@ -14,10 +14,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -46,9 +46,9 @@ public class Cart implements Serializable {
     private Double fullPrice;
     @OneToMany(mappedBy = "idCart")
     private List<Book> bookList;
-    @JoinColumn(name = "ID", referencedColumnName = "ID", insertable = false, updatable = false)
-    @OneToOne(optional = false)
-    private Buyer buyer;
+    @JoinColumn(name = "ID_USER", referencedColumnName = "ID")
+    @ManyToOne
+    private Buyer idUser;
 
     public Cart() {
     }
@@ -82,12 +82,12 @@ public class Cart implements Serializable {
         this.bookList = bookList;
     }
 
-    public Buyer getBuyer() {
-        return buyer;
+    public Buyer getIdUser() {
+        return idUser;
     }
 
-    public void setBuyer(Buyer buyer) {
-        this.buyer = buyer;
+    public void setIdUser(Buyer idUser) {
+        this.idUser = idUser;
     }
 
     @Override

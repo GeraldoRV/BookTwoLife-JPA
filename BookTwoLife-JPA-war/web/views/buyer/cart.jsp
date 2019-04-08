@@ -4,8 +4,13 @@
     Author     : Geraldo
 --%>
 
-<%@page import="model.Book"%>
-<%@page import="model.Cart"%>
+<%@page import="entities.Book"%>
+<%@page import="entities.Cart"%>
+<%@page import="entities.Buyer"%>
+<%@page import="ejb.CartFacade"%>
+<%@page import="javax.naming.InitialContext"%>
+
+
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -19,8 +24,12 @@
         <jsp:include page="partials/navbar.jsp" />
 
         <%
-            if (session.getAttribute("cart") != null) {
-                Cart cart = (Cart) session.getAttribute("cart");
+            Buyer buyer =(Buyer)session.getAttribute("userlogin");
+            CartFacade cf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/CartFacade!ejb.CartFacade");
+            
+            Cart cart= buyer.getCartList().get(0);
+            if (cart != null) {
+                cart = cf.find(cart.getId());
         %>
         <div class="container py-2">
             <form action="/BookTwoLife-JPA-war/FrontController">
@@ -29,10 +38,10 @@
             </form>
             <ul class="list-group">
                 <%
-                    for (Book elem : cart.getBooks()) {%>
+                    for (Book elem : cart.getBookList()) {%>
 
                 <li class="list-group-item justify-content-between align-items-center">
-                    <h5><%=elem.getName()%></h5> 
+                    <h5><%=elem.getBname()%></h5> 
                     <span><%=elem.getDescription()%></span><br>
                     <small><%=elem.getPrice()%> €</small>
                 </li>
