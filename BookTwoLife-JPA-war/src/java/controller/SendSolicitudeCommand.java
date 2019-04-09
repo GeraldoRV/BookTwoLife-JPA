@@ -5,16 +5,21 @@
  */
 package controller;
 
+import ejb.CartFacade;
+import ejb.SolicitudeFacade;
+import entities.Book;
+import entities.Buyer;
+import entities.Cart;
+import entities.Solicitude;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpSession;
-import model.Book;
-import model.Cart;
-import model.Solicitude;
 
 /**
  *
@@ -26,19 +31,38 @@ public class SendSolicitudeCommand extends FrontCommand {
 
     @Override
     public void process() {
-        session = request.getSession(true);
-        List<Solicitude> solicitudesList = getSolicitudeList();
-        addNewSolicitude(solicitudesList);
-        saveInSession(solicitudesList);
-       
-        cleanCart();
         try {
-            forward("/views/buyer/cart.jsp");
-        } catch (ServletException | IOException ex) {
-            Logger.getLogger(AddToCartCommand.class.getName()).log(Level.SEVERE, null, ex);
+            session = request.getSession(true);
+            Buyer buyer = (Buyer) session.getAttribute("userlogin");
+            CartFacade cf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/CartFacade!ejb.CartFacade");
+
+            SolicitudeFacade sf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/SolicitudeFacade!ejb.SolicitudeFacade");
+
+            Cart cart = cf.find(buyer.getCartList().get(0).getId());
+            List<Solicitude> solicitudeList = sf.findAllByUser(buyer.getId());
+            List<entities.Book> bookList = cart.getBookList();
+            for (Book book : bookList) {
+                for (Solicitude solicitude : solicitudeList) {
+                    if (book.getIdSeller().getId() == solicitude.getIdSeller().getId()) {
+                        solicitude.getBookList().add(book);
+                    }
+                }
+            }
+
+            //List<Solicitude> solicitudesList = getSolicitudeList();
+            //addNewSolicitude(solicitudesList);
+            //saveInSession(solicitudesList);
+           // cleanCart();
+            try {
+                forward("/views/buyer/cart.jsp");
+            } catch (ServletException | IOException ex) {
+                Logger.getLogger(AddToCartCommand.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (NamingException ex) {
+            Logger.getLogger(SendSolicitudeCommand.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+/*
     private List<Solicitude> createSolicitudeList() {
         return new ArrayList<>();
     }
@@ -86,6 +110,6 @@ public class SendSolicitudeCommand extends FrontCommand {
     private void createAproveSolitude(List<Solicitude> solicitudeList) {
         Solicitude solicitude = new Solicitude(1, getBooks(), "Compra aprobada", "Margaret");
         solicitudeList.add(solicitude);
-    }
+    }*/
 
 }

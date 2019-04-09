@@ -6,6 +6,7 @@
 package ejb;
 
 import entities.Solicitude;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,5 +29,10 @@ public class SolicitudeFacade extends AbstractFacade<Solicitude> {
     public SolicitudeFacade() {
         super(Solicitude.class);
     }
-    
+
+    public List<Solicitude> findAllByUser(Integer id) {
+        return em.createQuery("SELECT s FROM Solicitude s WHERE s.idBuyer.id =:id")
+                .setParameter("id", id)
+                .getResultList();
+    }
 }

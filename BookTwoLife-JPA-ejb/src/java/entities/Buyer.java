@@ -35,7 +35,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Buyer.findById", query = "SELECT b FROM Buyer b WHERE b.id = :id")
     , @NamedQuery(name = "Buyer.findByFname", query = "SELECT b FROM Buyer b WHERE b.fname = :fname")
     , @NamedQuery(name = "Buyer.findByUsername", query = "SELECT b FROM Buyer b WHERE b.username = :username")
-    , @NamedQuery(name = "Buyer.findByPassword", query = "SELECT b FROM Buyer b WHERE b.password = :password")})
+    , @NamedQuery(name = "Buyer.findByPassword", query = "SELECT b FROM Buyer b WHERE b.password = :password")
+    , @NamedQuery(name = "Buyer.findByCountry", query = "SELECT b FROM Buyer b WHERE b.country = :country")
+    , @NamedQuery(name = "Buyer.findByCity", query = "SELECT b FROM Buyer b WHERE b.city = :city")})
 public class Buyer implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -57,6 +59,12 @@ public class Buyer implements Serializable {
     @Size(max = 20)
     @Column(name = "PASSWORD")
     private String password;
+    @Size(max = 20)
+    @Column(name = "COUNTRY")
+    private String country;
+    @Size(max = 50)
+    @Column(name = "CITY")
+    private String city;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idBuyer")
     private List<Solicitude> solicitudeList;
     @OneToMany(mappedBy = "idUser")
@@ -105,6 +113,22 @@ public class Buyer implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     @XmlTransient

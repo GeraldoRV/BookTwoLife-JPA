@@ -45,7 +45,8 @@ public class BookFacade extends AbstractFacade<Book> {
     public void addToCart(Cart idCart, Integer idBook) {
         em.createQuery("UPDATE Book b SET b.idCart =:idCart WHERE b.id =:id")
                 .setParameter("idCart", idCart)
-                .setParameter("id", idBook).executeUpdate();
+                .setParameter("id", idBook)
+                .executeUpdate();
     }
 
     public void createBook(String name, String description, String genre, double price, Integer seller) {
@@ -58,13 +59,20 @@ public class BookFacade extends AbstractFacade<Book> {
                 .executeUpdate();
     }
 
-    public List<Book> findByName(String name,int index) {
+    public List<Book> findByName(String name, int index) {
+
         return em.createQuery("SELECT b FROM Book b WHERE b.idCart IS NULL AND b.idSolicitude IS NULL AND b.bname LIKE :name ORDER BY b.price").setMaxResults(2)
                 .setParameter("name", "%" + name + "%")
                 .setFirstResult(index)
                 .setMaxResults(3)
                 .getResultList();
 
+    }
+
+    public Long countByName(String name) {
+        return  (Long) em.createQuery("SELECT COUNT(b) FROM Book b WHERE b.idCart IS NULL AND b.idSolicitude IS NULL AND b.bname LIKE :name ").setMaxResults(2)
+                .setParameter("name", "%" + name + "%")
+                .getSingleResult();
     }
 
     public List<Book> findByNameCriteria(String name) {

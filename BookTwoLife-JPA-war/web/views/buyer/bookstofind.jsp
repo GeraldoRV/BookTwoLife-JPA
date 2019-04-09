@@ -71,7 +71,7 @@
                         <a class="page-link" href="#" aria-label="Previous"><form action="/BookTwoLife-JPA-war/FrontController">
                                 <input type="hidden" name="command" value="PreResultsCommand">
 
-                                <button type="submit" style="padding: 0;
+                                <button class="page-link" type="submit" style="padding: 0;
                                         border: none;
                                         background-color: inherit;"><span aria-hidden="true">&laquo;</span>
                                     <span class="sr-only">Previous</span></button>
@@ -79,14 +79,35 @@
 
                         </a>
                     </li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <%
+                        Long countByName = (Long) session.getAttribute("indexes");
+                        Integer i = 1;
+                        while (countByName >=0) {
+                    %>
+
+
+
+                    <li class="page-item"><a class="page-link" href="#">
+                            <form action="/BookTwoLife-JPA-war/FrontController">
+                                <input type="hidden" name="command" value="SelectRangeCommand">
+                                <input type="hidden" name="npage" value="<%=i%>">
+                                <button class="page-link"type="submit"style="padding: 0;
+                                        border: none;
+                                        background-color: inherit;"><%=i%></button>
+                            </form></a></li>
+
+
+                    <%
+                            i++;
+                            countByName--;
+                        }
+                    %>
+                   
                     <li class="page-item">
                         <a class="page-link" href="#" aria-label="Next"><form action="/BookTwoLife-JPA-war/FrontController">
                                 <input type="hidden" name="command" value="NextResultsCommand">
 
-                                <button type="submit" style="padding: 0;
+                                <button class="page-link" type="submit" style="padding: 0;
                                         border: none;
                                         background-color: inherit;"><span aria-hidden="true">&raquo;</span>
                                     <span class="sr-only">Next</span></button>

@@ -45,10 +45,10 @@ public class Book implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 20)
+    @Size(min = 1, max = 50)
     @Column(name = "BNAME")
     private String bname;
-    @Size(max = 100)
+    @Size(max = 1000)
     @Column(name = "DESCRIPTION")
     private String description;
     @Size(max = 20)

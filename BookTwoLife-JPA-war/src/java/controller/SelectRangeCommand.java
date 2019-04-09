@@ -15,24 +15,20 @@ import javax.servlet.http.HttpSession;
  *
  * @author Geraldo
  */
-public class NextResultsCommand extends FrontCommand {
+public class SelectRangeCommand extends FrontCommand {
 
     @Override
     public void process() {
         HttpSession session = request.getSession();
-        Integer index = (Integer) session.getAttribute("indextofind");
-        Long indexes = (Long) session.getAttribute("indexes");
-        index += 3;
-        int indexMax = indexes.intValue() * 3;
-        if (index > indexMax) {
-            index = indexMax;
-        }
-        session.setAttribute("indextofind", index);
+        String npage = request.getParameter("npage");
+        Integer nPage = Integer.parseInt(npage);
+        session.setAttribute("indextofind", (nPage-1)*3);
         try {
             forward("/views/buyer/bookstofind.jsp");
         } catch (ServletException | IOException ex) {
             Logger.getLogger(FindBooKCommand.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
-
+    
 }
