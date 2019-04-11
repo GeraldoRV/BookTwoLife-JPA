@@ -10,6 +10,7 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -36,8 +37,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Buyer.findByFname", query = "SELECT b FROM Buyer b WHERE b.fname = :fname")
     , @NamedQuery(name = "Buyer.findByUsername", query = "SELECT b FROM Buyer b WHERE b.username = :username")
     , @NamedQuery(name = "Buyer.findByPassword", query = "SELECT b FROM Buyer b WHERE b.password = :password")
-    , @NamedQuery(name = "Buyer.findByCountry", query = "SELECT b FROM Buyer b WHERE b.country = :country")
-    , @NamedQuery(name = "Buyer.findByCity", query = "SELECT b FROM Buyer b WHERE b.city = :city")})
+    , @NamedQuery(name = "Buyer.findByCountry", query = "SELECT b FROM Buyer b WHERE b.address.country = :country")
+    , @NamedQuery(name = "Buyer.findByCity", query = "SELECT b FROM Buyer b WHERE b.address.city = :city")})
 public class Buyer implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -59,12 +60,8 @@ public class Buyer implements Serializable {
     @Size(max = 20)
     @Column(name = "PASSWORD")
     private String password;
-    @Size(max = 20)
-    @Column(name = "COUNTRY")
-    private String country;
-    @Size(max = 50)
-    @Column(name = "CITY")
-    private String city;
+    @Embedded
+    private Address address;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idBuyer")
     private List<Solicitude> solicitudeList;
     @OneToMany(mappedBy = "idUser")
@@ -99,6 +96,15 @@ public class Buyer implements Serializable {
         this.fname = fname;
     }
 
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+
     public String getUsername() {
         return username;
     }
@@ -113,22 +119,6 @@ public class Buyer implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
     }
 
     @XmlTransient
@@ -173,5 +163,5 @@ public class Buyer implements Serializable {
     public String toString() {
         return "entities.Buyer[ id=" + id + " ]";
     }
-    
+
 }

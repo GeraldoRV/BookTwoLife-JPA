@@ -61,7 +61,9 @@ public class BookFacade extends AbstractFacade<Book> {
 
     public List<Book> findByName(String name, int index) {
 
-        return em.createQuery("SELECT b FROM Book b WHERE b.idCart IS NULL AND b.idSolicitude IS NULL AND b.bname LIKE :name ORDER BY b.price").setMaxResults(2)
+        return em.createQuery("SELECT b FROM Book b "
+                + "WHERE b.idCart IS NULL AND b.idSolicitude IS NULL AND b.bname "
+                + "LIKE :name ORDER BY b.price")
                 .setParameter("name", "%" + name + "%")
                 .setFirstResult(index)
                 .setMaxResults(3)

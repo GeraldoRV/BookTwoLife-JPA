@@ -45,7 +45,17 @@ public class SendSolicitudeCommand extends FrontCommand {
                 for (Solicitude solicitude : solicitudeList) {
                     if (book.getIdSeller().getId() == solicitude.getIdSeller().getId()) {
                         solicitude.getBookList().add(book);
+                        book.setIdSolicitude(solicitude);
+                        break;
                     }
+                }
+                if (book.getIdSolicitude() == null) {
+                    Solicitude solicitude = new Solicitude();
+                    solicitude.setIdBuyer(buyer);
+                    
+                    solicitude.setIdSeller(book.getIdSeller());
+                    sf.create(solicitude);
+                    
                 }
             }
 
