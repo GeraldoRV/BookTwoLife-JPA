@@ -43,22 +43,24 @@ public class LoginCommand extends FrontCommand {
 
     private void loginBuyer() {
         Buyer buyer = null;
+        BuyerFacade bf;
+
         try {
-            BuyerFacade bf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/BuyerFacade!ejb.BuyerFacade");
+            bf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/BuyerFacade!ejb.BuyerFacade");
             buyer = bf.login(username, password);
-        } catch (NamingException ex) {
-            Logger.getLogger(LoginCommand.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
             if (buyer != null) {
+                if (buyer.getCartList().isEmpty()) {
+
+                    setCart(buyer);
+                   
+                }
                 saveInSession(buyer);
-                setCart(buyer);
 
                 forward("/views/buyer/main.jsp");
             } else {
                 forward("/index.jsp");
             }
-        } catch (ServletException | IOException ex) {
+        } catch (ServletException | IOException | NamingException ex) {
             Logger.getLogger(LoginCommand.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -83,27 +85,24 @@ public class LoginCommand extends FrontCommand {
         }
     }
 
-    private void saveInSession(Object user) {
+    private void saveInSession(     Object user) {
         HttpSession session = request.getSession(true);
         session.setAttribute("userlogin", user);
 
     }
 
     private void setCart(Buyer buyer) {
-        if (buyer.getCartList().isEmpty()) {
-            try {
-                Cart cart = new Cart();
-                cart.setIdUser(buyer);
-                cart.setFullPrice(0.);
-                CartFacade cf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/CartFacade!ejb.CartFacade");
-                cf.create(cart);
-                BuyerFacade bf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/BuyerFacade!ejb.BuyerFacade");
-                buyer = bf.find(buyer.getId());
+        try {
+            Cart cart = new Cart();
+            cart.setIdUser(buyer);
+            cart.setFullPrice(0.);
+            CartFacade cf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/CartFacade!ejb.CartFacade");
+            cf.create(cart);
 
-            } catch (NamingException ex) {
-                Logger.getLogger(LoginCommand.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        } catch (NamingException ex) {
+            Logger.getLogger(LoginCommand.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 
 }

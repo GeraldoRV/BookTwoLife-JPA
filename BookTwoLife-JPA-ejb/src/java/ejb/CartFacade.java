@@ -35,4 +35,9 @@ public class CartFacade extends AbstractFacade<Cart> {
                 .setParameter("price", price)
                 .setParameter("id", idCart).executeUpdate();
     }
+    public Cart findWhereBuyer(Buyer buyer){
+        return (Cart) em.createQuery("SELECT c FROM Cart c WHERE c.idUser=:iduser")
+                .setParameter("iduser", buyer)
+                .getSingleResult();
+    }
 }

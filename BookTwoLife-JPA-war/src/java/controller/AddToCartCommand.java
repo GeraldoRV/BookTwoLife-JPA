@@ -45,7 +45,9 @@ public class AddToCartCommand extends FrontCommand {
         Buyer buyer = (Buyer) session.getAttribute("userlogin");
         try {
             BookFacade bf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/BookFacade!ejb.BookFacade");
-            Cart cart = buyer.getCartList().get(0);
+            CartFacade cf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/CartFacade!ejb.CartFacade");
+            
+            Cart cart = cf.find(buyer.getId());
             bf.addToCart(cart, Integer.parseInt(idBook));
             updatePrice(cart);
         } catch (NamingException ex) {

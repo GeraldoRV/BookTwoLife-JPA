@@ -4,7 +4,11 @@
     Author     : Geraldo
 --%>
 
-<%@page import="model.Solicitude"%>
+<%@page import="ejb.BookFacade"%>
+<%@page import="entities.Solicitude"%>
+<%@page import="entities.Buyer"%>
+<%@page import="javax.naming.InitialContext"%>
+<%@page import="ejb.SolicitudeFacade"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -16,7 +20,13 @@
     </head>
     <body>
         <jsp:include page="partials/navbar.jsp" />
-        <%List<Solicitude> solicitudelist = (List) session.getAttribute("solicitudeslist"); %>
+        <%
+            Buyer buyer = (Buyer) session.getAttribute("userlogin");
+            BookFacade bf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/BookFacade!ejb.BookFacade");
+            SolicitudeFacade sf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/SolicitudeFacade!ejb.SolicitudeFacade");
+            List<Solicitude> solicitudelist = sf.findAllByUser(buyer.getId());
+
+        %>
 
         <%if (solicitudelist == null) {%>
         <h1>No hay</h1>
@@ -56,9 +66,9 @@
                                         continue;
                                     }%>
                             <tr>
-                                <td><%=elem.getIndex()%></td>
-                                <td><%=elem.getBooks().size()%></td>
-                                <td><%=elem.getSeller()%></td>
+                                <td><%=elem.getId()%></td>
+                                <td><%=elem.getBookList().size()%></td>
+                                <td><%=elem.getIdSeller().getFname()%></td>
                                 <td>25€</td>
 
                                 <td>
@@ -89,11 +99,13 @@
                             <%for (Solicitude elem : solicitudelist) {
                                     if (elem.getStatus().equals("Compra aprobada")) {
                                         continue;
-                                    }%>
+                                    }
+                            Long nBooks=bf.countWhereSolicitude(elem);
+                            %>
                             <tr>
-                                <td><%=elem.getIndex()%></td>
-                                <td><%=elem.getBooks().size()%></td>
-                                <td><%=elem.getSeller()%></td>
+                                <td><%=elem.getId()%></td>
+                                <td><%=nBooks%></td>
+                                <td><%=elem.getIdSeller().getFname()%></td>
                                 <td>25€</td>
 
 

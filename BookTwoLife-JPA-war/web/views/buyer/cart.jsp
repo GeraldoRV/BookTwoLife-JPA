@@ -4,6 +4,7 @@
     Author     : Geraldo
 --%>
 
+<%@page import="ejb.BookFacade"%>
 <%@page import="entities.Book"%>
 <%@page import="entities.Cart"%>
 <%@page import="entities.Buyer"%>
@@ -24,12 +25,13 @@
         <jsp:include page="partials/navbar.jsp" />
 
         <%
-            Buyer buyer =(Buyer)session.getAttribute("userlogin");
+            Buyer buyer = (Buyer) session.getAttribute("userlogin");
             CartFacade cf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/CartFacade!ejb.CartFacade");
-            
-            Cart cart= buyer.getCartList().get(0);
+            BookFacade bf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/BookFacade!ejb.BookFacade");
+            Cart cart = cf.find(buyer.getId());
             if (cart != null) {
-                cart = cf.find(cart.getId());
+                // cart = cf.find(cart.getId());
+                List<Book> books = bf.findWhereCart(cart);
         %>
         <div class="container py-2">
             <form action="/BookTwoLife-JPA-war/FrontController">
@@ -38,7 +40,7 @@
             </form>
             <ul class="list-group">
                 <%
-                    for (Book elem : cart.getBookList()) {%>
+                    for (Book elem : books) {%>
 
                 <li class="list-group-item justify-content-between align-items-center">
                     <h5><%=elem.getBname()%></h5> 

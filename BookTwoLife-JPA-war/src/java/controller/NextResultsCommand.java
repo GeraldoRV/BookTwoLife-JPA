@@ -24,6 +24,8 @@ public class NextResultsCommand extends FrontCommand {
         Long indexes = (Long) session.getAttribute("indexes");
         index += 3;
         int indexMax = indexes.intValue() * 3;
+        System.out.println(indexMax + " max");
+        System.out.println(index + "index");
         if (index > indexMax) {
             index = indexMax;
         }

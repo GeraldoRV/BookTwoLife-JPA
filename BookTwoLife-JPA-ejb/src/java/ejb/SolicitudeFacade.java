@@ -35,13 +35,13 @@ public class SolicitudeFacade extends AbstractFacade<Solicitude> {
                 .setParameter("id", id)
                 .getResultList();
     }
-    
-    public void insert(Object idbuyer, Object idseller){
+
+    public void insert(Object idbuyer, Object idseller) {
         em.createNativeQuery("INSERT INTO SOLICITUDE (ID_SELLER, ID_BUYER, STATUS) VALUES (?,?,?)")
                 .setParameter(1, idseller)
-                .setParameter(2,idbuyer)
-                .setParameter(3,"En proceso")
+                .setParameter(2, idbuyer)
+                .setParameter(3, "En proceso")
                 .executeUpdate();
-                
+
     }
 }

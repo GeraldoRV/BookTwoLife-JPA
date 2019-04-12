@@ -31,12 +31,14 @@ public class FindBooKCommand extends FrontCommand {
             try {
                 BookFacade bf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/BookFacade!ejb.BookFacade");
                 Long countByName = bf.countByName(name);
+                System.out.println(countByName + " total");
                 if (countByName > 3) {
                     countByName /= 3;
 
                 } else {
                     countByName = 0L;
                 }
+                System.out.println(countByName + " pags");
                 session.setAttribute("indexes", countByName);
             } catch (NamingException ex) {
                 Logger.getLogger(FindBooKCommand.class.getName()).log(Level.SEVERE, null, ex);

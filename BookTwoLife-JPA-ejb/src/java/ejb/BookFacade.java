@@ -7,6 +7,7 @@ package ejb;
 
 import entities.Book;
 import entities.Cart;
+import entities.Solicitude;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -48,6 +49,12 @@ public class BookFacade extends AbstractFacade<Book> {
                 .setParameter("id", idBook)
                 .executeUpdate();
     }
+    public void addToSolicitude(Solicitude idSolicitude, Integer idBook) {
+        em.createQuery("UPDATE Book b SET b.idSolicitude =:idSolicitude, b.idCart = null WHERE b.id =:id")
+                .setParameter("idSolicitude", idSolicitude)
+                .setParameter("id", idBook)
+                .executeUpdate();
+    }
 
     public void createBook(String name, String description, String genre, double price, Integer seller) {
         em.createNativeQuery("INSERT INTO BOOK (BNAME,DESCRIPTION,GENRE,PRICE,ID_SELLER) VALUES(?, ?,?,?,?)")
@@ -72,8 +79,13 @@ public class BookFacade extends AbstractFacade<Book> {
     }
 
     public Long countByName(String name) {
-        return  (Long) em.createQuery("SELECT COUNT(b) FROM Book b WHERE b.idCart IS NULL AND b.idSolicitude IS NULL AND b.bname LIKE :name ").setMaxResults(2)
+        return  (Long) em.createQuery("SELECT COUNT(b) FROM Book b WHERE b.idCart IS NULL AND b.idSolicitude IS NULL AND b.bname LIKE :name ")
                 .setParameter("name", "%" + name + "%")
+                .getSingleResult();
+    }
+    public Long countWhereSolicitude(Solicitude solicitude) {
+        return  (Long) em.createQuery("SELECT COUNT(b) FROM Book b WHERE b.idSolicitude=:solicitude")
+                .setParameter("solicitude",  solicitude)
                 .getSingleResult();
     }
 
@@ -90,5 +102,11 @@ public class BookFacade extends AbstractFacade<Book> {
         TypedQuery<Book> q = em.createQuery(cq);
         q.setParameter(p, "%" + name + "%");
         return q.getResultList();
+    }
+    public List<Book> findWhereCart(Cart cart) {
+     return em.createQuery("SELECT b FROM Book b "
+                + "WHERE b.idCart =:cart AND b.idSolicitude IS NULL")
+             .setParameter("cart", cart)
+                .getResultList();   
     }
 }
