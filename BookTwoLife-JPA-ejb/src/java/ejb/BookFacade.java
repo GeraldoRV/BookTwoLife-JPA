@@ -39,10 +39,14 @@ public class BookFacade extends AbstractFacade<Book> {
         super(Book.class);
     }
 
-    public List<Book> findWhereNotCart() {
-        return em.createQuery("SELECT b FROM Book b "
-                + "WHERE b.idCart IS NULL AND b.idSolicitude IS NULL")
-                .getResultList();
+    public void createBook(String name, String description, String genre, double price, Integer seller) {
+        em.createNativeQuery("INSERT INTO BOOK (BNAME,DESCRIPTION,GENRE,PRICE,ID_SELLER) VALUES(?, ?,?,?,?)")
+                .setParameter(1, name)
+                .setParameter(2, description)
+                .setParameter(3, genre)
+                .setParameter(4, price)
+                .setParameter(5, seller)
+                .executeUpdate();
     }
 
     public void addToCart(Cart idCart, Integer idBook) {
@@ -66,14 +70,35 @@ public class BookFacade extends AbstractFacade<Book> {
                 .executeUpdate();
     }
 
-    public void createBook(String name, String description, String genre, double price, Integer seller) {
-        em.createNativeQuery("INSERT INTO BOOK (BNAME,DESCRIPTION,GENRE,PRICE,ID_SELLER) VALUES(?, ?,?,?,?)")
-                .setParameter(1, name)
-                .setParameter(2, description)
-                .setParameter(3, genre)
-                .setParameter(4, price)
-                .setParameter(5, seller)
+    public void removeAllFromCart(Cart cart) {
+        em.createQuery("UPDATE Book b SET b.idCart =null WHERE b.idCart=:cart")
+                .setParameter("cart", cart)
                 .executeUpdate();
+    }
+
+    public List<Book> findWhereCart(Cart cart) {
+        return em.createQuery("SELECT b FROM Book b "
+                + "WHERE b.idCart =:cart AND b.idSolicitude IS NULL")
+                .setParameter("cart", cart)
+                .getResultList();
+    }
+
+    public List<Book> findWhereWishList(Wishlist wishlist) {
+        return em.createQuery("SELECT b FROM Book b WHERE b.idWishlist=:wishlist AND b.idSolicitude IS NULL")
+                .setParameter("wishlist", wishlist)
+                .getResultList();
+    }
+
+    public List<Book> findWhereSeller(Seller seller) {
+        return em.createQuery("SELECT b FROM Book b  WHERE b.idSeller=:seller")
+                .setParameter("seller", seller)
+                .getResultList();
+    }
+
+    public List<Book> findWhereNotCart() {
+        return em.createQuery("SELECT b FROM Book b "
+                + "WHERE b.idCart IS NULL AND b.idSolicitude IS NULL")
+                .getResultList();
     }
 
     public List<Book> findByName(String name, int index) {
@@ -86,18 +111,6 @@ public class BookFacade extends AbstractFacade<Book> {
                 .setMaxResults(3)
                 .getResultList();
 
-    }
-
-    public Long countByName(String name) {
-        return (Long) em.createQuery("SELECT COUNT(b) FROM Book b WHERE b.idCart IS NULL AND b.idSolicitude IS NULL AND b.bname LIKE :name ")
-                .setParameter("name", "%" + name + "%")
-                .getSingleResult();
-    }
-
-    public Long countWhereSolicitude(Solicitude solicitude) {
-        return (Long) em.createQuery("SELECT COUNT(b) FROM Book b WHERE b.idSolicitude=:solicitude")
-                .setParameter("solicitude", solicitude)
-                .getSingleResult();
     }
 
     public List<Book> findByNameCriteria(String name, int index) {
@@ -121,37 +134,21 @@ public class BookFacade extends AbstractFacade<Book> {
         return q.getResultList();
     }
 
-    public List<Book> findWhereCart(Cart cart) {
-        return em.createQuery("SELECT b FROM Book b "
-                + "WHERE b.idCart =:cart AND b.idSolicitude IS NULL")
-                .setParameter("cart", cart)
-                .getResultList();
-    }
-
-    public List<Book> findWhereWishList(Wishlist wishlist) {
-        return em.createQuery("SELECT b FROM Book b WHERE b.idWishlist=:wishlist AND b.idSolicitude IS NULL")
-                .setParameter("wishlist", wishlist)
-                .getResultList();
-    }
-
-    
-
-    public void removeAllFromCart(Cart cart) {
-      em.createQuery("UPDATE Book b SET b.idCart =null WHERE b.idCart=:cart")
-                .setParameter("cart", cart)
-                .executeUpdate();
-    }
-    
-    public List<Book> findWhereSeller(Seller seller){
-        return em.createQuery("SELECT b FROM Book b  WHERE b.idSeller=:seller")
-                .setParameter("seller", seller)
-                .getResultList();
-    }
-
     public void delete(Integer id) {
         em.createQuery("DELETE FROM Book b WHERE b.id=:id")
                 .setParameter("id", id)
                 .executeUpdate();
     }
 
+    public Long countByName(String name) {
+        return (Long) em.createQuery("SELECT COUNT(b) FROM Book b WHERE b.idCart IS NULL AND b.idSolicitude IS NULL AND b.bname LIKE :name ")
+                .setParameter("name", "%" + name + "%")
+                .getSingleResult();
+    }
+
+    public Long countWhereSolicitude(Solicitude solicitude) {
+        return (Long) em.createQuery("SELECT COUNT(b) FROM Book b WHERE b.idSolicitude=:solicitude")
+                .setParameter("solicitude", solicitude)
+                .getSingleResult();
+    }
 }

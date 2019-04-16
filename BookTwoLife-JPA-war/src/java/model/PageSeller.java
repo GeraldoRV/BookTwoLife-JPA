@@ -5,11 +5,16 @@
  */
 package model;
 
+import ejb.BookFacade;
+import entities.Book;
+import entities.Seller;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -21,37 +26,41 @@ import javax.xml.bind.annotation.XmlType;
  * @author Geraldo
  */
 @XmlRootElement
-@XmlType(propOrder = {"sellerName", "bookList"})
+@XmlType(propOrder = {"seller", "bookList"})
 public class PageSeller {
 
     private BookList bookList;
-    private String sellerName;
+    private Seller seller;
+
+    public Seller getSeller() {
+        return seller;
+    }
+
+    public void setSeller(Seller seller) {
+        this.seller = seller;
+        try {
+            BookFacade bf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/BookFacade!ejb.BookFacade");
+            List<Book> books = bf.findWhereSeller(seller);
+            bookList.setBooks(books);
+        } catch (NamingException ex) {
+            Logger.getLogger(PageSeller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     public PageSeller() {
+        bookList = new BookList();
     }
 
     public void setBookList(BookList bookList) {
         this.bookList = bookList;
     }
 
-    public void setSellerName(String sellerName) {
-        this.sellerName = sellerName;
-    }
-
+   
     public BookList getBookList() {
         return bookList;
     }
 
-    public String getSellerName() {
-        return sellerName;
-    }
-
-    public void find(String name) {
-        sellerName = name;
-        createBook();
-
-    }
-
+   
     public String toXml() {
         String result="";
         try {
@@ -70,15 +79,6 @@ public class PageSeller {
         return result;
     }
 
-    private void createBook() {
-        List<Book> bookList = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            Book book = new Book();
-            book = book.find("" + i);
-            bookList.add(book);
-        }
-        this.bookList = new BookList();
-        this.bookList.setBooks(bookList);
-    }
+    
 
 }

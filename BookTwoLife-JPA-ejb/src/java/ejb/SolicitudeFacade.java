@@ -30,12 +30,6 @@ public class SolicitudeFacade extends AbstractFacade<Solicitude> {
         super(Solicitude.class);
     }
 
-    public List<Solicitude> findAllByUser(Integer id) {
-        return em.createQuery("SELECT s FROM Solicitude s WHERE s.idBuyer.id =:id")
-                .setParameter("id", id)
-                .getResultList();
-    }
-
     public void insert(Object idbuyer, Object idseller) {
         em.createNativeQuery("INSERT INTO SOLICITUDE (ID_SELLER, ID_BUYER, STATUS) VALUES (?,?,?)")
                 .setParameter(1, idseller)
@@ -43,5 +37,11 @@ public class SolicitudeFacade extends AbstractFacade<Solicitude> {
                 .setParameter(3, "En proceso")
                 .executeUpdate();
 
+    }
+    
+    public List<Solicitude> findAllByUser(Integer id) {
+        return em.createQuery("SELECT s FROM Solicitude s WHERE s.idBuyer.id =:id")
+                .setParameter("id", id)
+                .getResultList();
     }
 }

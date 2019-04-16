@@ -56,11 +56,11 @@
                 <div class="container py-3">
                     <div class="row">
                         <div class="col">
-                            <img src="/BookTwoLife-JPA-war/images/{bookid}.jpg" width="100%"  alt="princ"/>
+                            <img src="/BookTwoLife-JPA-war/images/princ.jpg" width="100%"  alt="princ"/>
                         </div>
                         <div class="col" >
                             <h1>
-                                <xsl:value-of select="name"/>
+                                <xsl:value-of select="bname"/>
                             </h1>
                             <span>
                                 <xsl:value-of select="genre"/>
@@ -75,12 +75,12 @@
                             </h3>
                             
                             <h4>
-                                <xsl:value-of select="sellerName"/>
+                                <xsl:value-of select="idSeller/fname"/>
                             </h4>
                             
                             <form action="/BookTwoLife-JPA-war/FrontController">                   
                                 <input type="hidden" name="command" value="TwoStepViewCommand"/>
-                                <input type="hidden" name="name" value="{sellerName}"/>
+                                <input type="hidden" name="id" value="{idSeller/id}"/>
                                 <button type="submit" class="btn btn-warning">Información del vendedor</button>
                             </form>
                         

@@ -37,6 +37,12 @@ public class CartFacade extends AbstractFacade<Cart> {
                 .setParameter("id", idCart).executeUpdate();
     }
 
+    public void deleteWhereBuyer(Buyer buyer) {
+        em.createQuery("DELETE FROM Cart c WHERE c.idUser=:cart")
+                .setParameter("cart", buyer)
+                .executeUpdate();
+    }
+
     public Cart findWhereBuyer(Buyer buyer) {
         return (Cart) em.createQuery("SELECT c FROM Cart c WHERE c.idUser=:iduser")
                 .setParameter("iduser", buyer)
@@ -50,9 +56,4 @@ public class CartFacade extends AbstractFacade<Cart> {
         return !resultList.isEmpty();
     }
 
-    public void deleteWhereBuyer(Buyer buyer) {
-        em.createQuery("DELETE FROM Cart c WHERE c.idUser=:cart")
-                .setParameter("cart", buyer)
-                .executeUpdate();
-    }
 }

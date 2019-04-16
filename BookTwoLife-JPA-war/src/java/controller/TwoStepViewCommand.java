@@ -5,12 +5,16 @@
  */
 package controller;
 
+import ejb.SellerFacade;
+import entities.Seller;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -24,12 +28,20 @@ import model.PageSeller;
 
 public class TwoStepViewCommand extends FrontCommand {
 
-    private final String PATH = "C:\\Users\\Geraldo.LAPTOP-09QGLT5H\\Documents\\NetBeansProjects\\AS1819\\BookTwoLife-JPA\\BookTwoLife-JPA-war\\src\\java\\utilities";
+    private final String PATH = "C:\\Users\\Geraldo.LAPTOP-09QGLT5H\\Documents\\NetBeansProjects\\AS1819\\BookTwoLife-JPA\\BookTwoLife-JPA-war\\src\\java\\utilities\\";
 
     @Override
     public void process() {
         PageSeller pg = new PageSeller();
-        pg.find(request.getParameter("name"));
+        try {
+            SellerFacade sf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/SellerFacade!ejb.SellerFacade");
+            Seller seller = sf.find(Integer.parseInt(request.getParameter("id")));
+            
+        pg.setSeller(seller);
+            System.out.println(pg.toXml());
+        } catch (NamingException ex) {
+            Logger.getLogger(TwoStepViewCommand.class.getName()).log(Level.SEVERE, null, ex);
+        }
  
         try {
             TransformerFactory factory = TransformerFactory.newInstance();

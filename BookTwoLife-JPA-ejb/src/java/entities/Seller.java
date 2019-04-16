@@ -6,7 +6,10 @@
 package entities;
 
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,6 +23,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -145,6 +151,23 @@ public class Seller implements Serializable {
         return true;
     }
 
+    public String toXML(){
+         String result="";
+        try {
+           
+            JAXBContext jax = JAXBContext.newInstance(Seller.class);
+            Marshaller m = jax.createMarshaller();
+
+            m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            StringWriter stringWriter = new StringWriter();
+            m.marshal(this, stringWriter);
+            result = stringWriter.toString();
+
+        } catch (JAXBException e) {
+            Logger.getLogger(Seller.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return result;
+    }
     @Override
     public String toString() {
         return "entities.Seller[ id=" + id + " ]";

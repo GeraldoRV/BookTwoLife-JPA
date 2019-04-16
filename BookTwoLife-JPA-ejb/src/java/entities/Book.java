@@ -6,6 +6,7 @@
 package entities;
 
 import java.io.Serializable;
+import java.io.StringWriter;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,6 +20,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -167,6 +171,21 @@ public class Book implements Serializable {
         return true;
     }
 
+    public String toXml(){
+        StringWriter result = new StringWriter();
+        try {
+            JAXBContext jax = JAXBContext.newInstance(Book.class);
+            Marshaller m = jax.createMarshaller();
+
+            m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            StringWriter sw = new StringWriter();
+            m.marshal(this, sw);
+            result = sw;
+        } catch (JAXBException e) {
+            System.out.println(e.getErrorCode());
+        }
+        return result.toString();
+    }
     @Override
     public String toString() {
         return "entities.Book[ id=" + id + " ]";

@@ -7,6 +7,7 @@ package controller;
 
 import ejb.BookFacade;
 import ejb.CartFacade;
+import entities.Book;
 import entities.Buyer;
 import entities.Cart;
 import java.io.IOException;
@@ -48,6 +49,8 @@ public class AddToCartCommand extends FrontCommand {
             
             Cart cart = cf.findWhereBuyer(buyer);
             bf.addToCart(cart, Integer.parseInt(idBook));
+            Book find = bf.find(Integer.parseInt(idBook));
+            System.out.println(find.toXml());
             updatePrice(cart);
         } catch (NamingException ex) {
             Logger.getLogger(AddToCartCommand.class.getName()).log(Level.SEVERE, null, ex);

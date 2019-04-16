@@ -5,6 +5,8 @@
  */
 package model;
 
+import entities.Book;
+import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -18,6 +20,8 @@ public class BookList {
     private List<Book> books;
 
     public BookList() {
+        books = new ArrayList<>(); 
+        
     }
 
     public List<Book> getBooks() {

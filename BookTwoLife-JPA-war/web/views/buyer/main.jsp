@@ -43,6 +43,7 @@
                         <form action="/BookTwoLife-JPA-war/FrontController">                   
                             <input type="hidden" name="command" value="TransformViewCommand">
                             <input type="hidden" name="name" value="Principito">
+                            <input type="hidden" name="id" value="<%=Integer.toString(book.getId())%>">
                             <button type="submit" class="btn btn-outline-warning">Ver detalles</button>
                         </form>
                         <form action="/BookTwoLife-JPA-war/FrontController">                   

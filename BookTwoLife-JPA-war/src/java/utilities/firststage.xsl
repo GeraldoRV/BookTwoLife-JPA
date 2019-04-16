@@ -10,7 +10,7 @@
             <xsl:apply-templates/>
         </screen>
     </xsl:template>
-    <xsl:template match="pageSeller/sellerName">
+    <xsl:template match="pageSeller/seller/fname">
         <title>
             <xsl:apply-templates/>
         </title>
@@ -41,7 +41,7 @@
             <xsl:apply-templates/>
         </cell>
     </xsl:template> 
-    <xsl:template match="books/name">
+    <xsl:template match="books/bname">
         <cell>
             <xsl:apply-templates/>
         </cell>
