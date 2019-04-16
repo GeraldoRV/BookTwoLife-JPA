@@ -133,4 +133,12 @@ public class BookFacade extends AbstractFacade<Book> {
                 .getResultList();
     }
 
+    
+
+    public void removeAllFromCart(Cart cart) {
+      em.createQuery("UPDATE Book b SET b.idCart =null WHERE b.idCart=:cart")
+                .setParameter("cart", cart)
+                .executeUpdate();
+    }
+
 }

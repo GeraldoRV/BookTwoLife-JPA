@@ -34,5 +34,9 @@
             <input type="hidden" name="command" value="FindBooKCriteriaCommand">
             <button class="btn btn-outline-warning my-2 my-sm-0" type="submit"><i class="fas fa-search"></i> Buscar</button>
         </form>
+      <form action="/BookTwoLife-JPA-war/FrontController" class="form-inline mx-auto">
+            <input type="hidden" name="command" value="LogoutCommand">
+            <button class="btn btn-warning" type="submit">Cerrar sesión</button>
+        </form>
   </div>
 </nav>

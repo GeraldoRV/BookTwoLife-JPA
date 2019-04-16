@@ -9,7 +9,7 @@
 <html>
     <head>
         <jsp:include page="partials/resource.jsp" />
-        <link rel="stylesheet" href="style/loginstyle.css"/>
+        <link rel="stylesheet" href="/BookTwoLife-JPA-war/style/loginstyle.css"/>
         <title>Login</title>
     </head>
     <body>
