@@ -54,11 +54,7 @@ public class SendSolicitudeCommand extends FrontCommand {
 
                 }
             }
-
-            //List<Solicitude> solicitudesList = getSolicitudeList();
-            //addNewSolicitude(solicitudesList);
-            //saveInSession(solicitudesList);
-            // cleanCart();
+            
             try {
                 forward("/views/buyer/cart.jsp");
             } catch (ServletException | IOException ex) {

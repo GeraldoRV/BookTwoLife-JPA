@@ -16,7 +16,6 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpSession;
-import model.Book;
 
 /**
  *
@@ -47,7 +46,7 @@ public class AddToCartCommand extends FrontCommand {
             BookFacade bf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/BookFacade!ejb.BookFacade");
             CartFacade cf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/CartFacade!ejb.CartFacade");
             
-            Cart cart = cf.find(buyer.getId());
+            Cart cart = cf.findWhereBuyer(buyer);
             bf.addToCart(cart, Integer.parseInt(idBook));
             updatePrice(cart);
         } catch (NamingException ex) {

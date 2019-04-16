@@ -6,7 +6,7 @@
 package ejb;
 
 import entities.Buyer;
-import entities.Cart;
+import entities.Wishlist;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -17,7 +17,7 @@ import javax.persistence.PersistenceContext;
  * @author Geraldo
  */
 @Stateless
-public class CartFacade extends AbstractFacade<Cart> {
+public class WishlistFacade extends AbstractFacade<Wishlist> {
 
     @PersistenceContext(unitName = "BookTwoLife-JPA-ejbPU")
     private EntityManager em;
@@ -27,26 +27,21 @@ public class CartFacade extends AbstractFacade<Cart> {
         return em;
     }
 
-    public CartFacade() {
-        super(Cart.class);
+    public WishlistFacade() {
+        super(Wishlist.class);
     }
 
-    public void updateFullPrice(Double price, Integer idCart) {
-        em.createQuery("UPDATE Cart c SET c.fullPrice = c.fullPrice + :price WHERE c.id = :id")
-                .setParameter("price", price)
-                .setParameter("id", idCart).executeUpdate();
-    }
-
-    public Cart findWhereBuyer(Buyer buyer) {
-        return (Cart) em.createQuery("SELECT c FROM Cart c WHERE c.idUser=:iduser")
+    public Wishlist findWhereBuyer(Buyer buyer) {
+        return (Wishlist) em.createQuery("SELECT w FROM Wishlist w WHERE w.idUser=:iduser")
                 .setParameter("iduser", buyer)
                 .getSingleResult();
     }
 
-    public Boolean haveACart(Buyer buyer) {
-        List resultList = em.createQuery("SELECT c FROM Cart c WHERE c.idUser=:iduser")
+    public boolean haveWisList(Buyer buyer) {
+        List resultList = em.createQuery("SELECT w FROM Wishlist w WHERE w.idUser=:iduser")
                 .setParameter("iduser", buyer)
                 .getResultList();
         return !resultList.isEmpty();
     }
+    
 }

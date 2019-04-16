@@ -8,9 +8,11 @@ package controller;
 import ejb.BuyerFacade;
 import ejb.CartFacade;
 import ejb.SellerFacade;
+import ejb.WishlistFacade;
 import entities.Buyer;
 import entities.Cart;
 import entities.Seller;
+import entities.Wishlist;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,18 +44,17 @@ public class LoginCommand extends FrontCommand {
     }
 
     private void loginBuyer() {
-        Buyer buyer = null;
+        Buyer buyer;
         BuyerFacade bf;
 
         try {
             bf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/BuyerFacade!ejb.BuyerFacade");
             buyer = bf.login(username, password);
             if (buyer != null) {
-                if (buyer.getCartList().isEmpty()) {
 
-                    setCart(buyer);
-                   
-                }
+                setCart(buyer);
+                setWishList(buyer);
+
                 saveInSession(buyer);
 
                 forward("/views/buyer/main.jsp");
@@ -85,7 +86,7 @@ public class LoginCommand extends FrontCommand {
         }
     }
 
-    private void saveInSession(     Object user) {
+    private void saveInSession(Object user) {
         HttpSession session = request.getSession(true);
         session.setAttribute("userlogin", user);
 
@@ -93,16 +94,35 @@ public class LoginCommand extends FrontCommand {
 
     private void setCart(Buyer buyer) {
         try {
-            Cart cart = new Cart();
-            cart.setIdUser(buyer);
-            cart.setFullPrice(0.);
+
             CartFacade cf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/CartFacade!ejb.CartFacade");
-            cf.create(cart);
+            if (!cf.haveACart(buyer)) {
+
+                Cart cart = new Cart();
+                cart.setIdUser(buyer);
+                cart.setFullPrice(0.);
+
+                cf.create(cart);
+            }
 
         } catch (NamingException ex) {
             Logger.getLogger(LoginCommand.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    private void setWishList(Buyer buyer) {
+        try {
+            WishlistFacade wf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/WishlistFacade!ejb.WishlistFacade");
+            if (!wf.haveWisList(buyer)) {
+                Wishlist wishlist = new Wishlist();
+                wishlist.setIdUser(buyer);
+                wf.create(wishlist);
+                
+            }
+        } catch (NamingException ex) {
+            Logger.getLogger(LoginCommand.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

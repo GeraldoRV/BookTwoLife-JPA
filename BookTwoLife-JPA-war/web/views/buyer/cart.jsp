@@ -28,9 +28,9 @@
             Buyer buyer = (Buyer) session.getAttribute("userlogin");
             CartFacade cf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/CartFacade!ejb.CartFacade");
             BookFacade bf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/BookFacade!ejb.BookFacade");
-            Cart cart = cf.find(buyer.getId());
+            Cart cart = cf.findWhereBuyer(buyer);
             if (cart != null) {
-                // cart = cf.find(cart.getId());
+                //cart = cf.find(cart.getId());
                 List<Book> books = bf.findWhereCart(cart);
         %>
         <div class="container py-2">

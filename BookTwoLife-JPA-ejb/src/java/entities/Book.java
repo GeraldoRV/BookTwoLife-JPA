@@ -37,6 +37,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Book.findByPrice", query = "SELECT b FROM Book b WHERE b.price = :price")})
 public class Book implements Serializable {
 
+    @JoinColumn(name = "ID_WISHLIST", referencedColumnName = "ID")
+    @ManyToOne
+    private Wishlist idWishlist;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -166,6 +170,14 @@ public class Book implements Serializable {
     @Override
     public String toString() {
         return "entities.Book[ id=" + id + " ]";
+    }
+
+    public Wishlist getIdWishlist() {
+        return idWishlist;
+    }
+
+    public void setIdWishlist(Wishlist idWishlist) {
+        this.idWishlist = idWishlist;
     }
     
 }

@@ -1,14 +1,16 @@
 <%-- 
-    Document   : main
-    Created on : 21-feb-2019, 12:42:55
+    Document   : wishlist
+    Created on : 16-abr-2019, 17:48:06
     Author     : Geraldo
 --%>
 
-<%@page import="entities.Book"%>
 <%@page import="java.util.List"%>
-
-<%@page import="javax.naming.InitialContext"%>
+<%@page import="entities.Book"%>
 <%@page import="ejb.BookFacade"%>
+<%@page import="entities.Wishlist"%>
+<%@page import="ejb.WishlistFacade"%>
+<%@page import="javax.naming.InitialContext"%>
+<%@page import="entities.Buyer"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -21,8 +23,13 @@
     <body>
         <jsp:include page="partials/navbar.jsp" />
         <%
-        BookFacade bf= InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/BookFacade!ejb.BookFacade");
-        List<Book> books =bf.findWhereNotCart();
+            Buyer buyer = (Buyer) session.getAttribute("userlogin");
+            WishlistFacade wf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/WishlistFacade!ejb.WishlistFacade");
+            BookFacade bf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/BookFacade!ejb.BookFacade");
+            Wishlist wishlist = wf.findWhereBuyer(buyer);
+            if (wishlist != null) {
+                //cart = cf.find(cart.getId());
+                List<Book> books = bf.findWhereWishList(wishlist);
         %>
         <div class="container py-2">
             <ul class="list-group">
@@ -52,17 +59,16 @@
                             <input type="hidden" name="price" value="<%=Double.toString(book.getPrice())%>">
                             <button type="submit" class="btn btn-warning">Añadir al carrito</button>
                         </form>
-                        <form action="/BookTwoLife-JPA-war/FrontController">                   
-                            <input type="hidden" name="command" value="AddToWishListCommand">
-                            <input type="hidden" name="name" value="Principito">
-                            <input type="hidden" name="id" value="<%=Integer.toString(book.getId())%>">
-                            <button type="submit" class="btn btn-warning">Añadir a la lista de deseos </button>
-                        </form>
                     </div>
                 </li>
                 <%}%>
                 
-            </ul>
+            </ul> 
+            <% } else {
+            %> 
+            <h1>Carrito Vacío</h1>    
+            <%}%>
         </div>
+
     </body>
 </html>

@@ -41,6 +41,16 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Buyer.findByCity", query = "SELECT b FROM Buyer b WHERE b.address.city = :city")})
 public class Buyer implements Serializable {
 
+    @Size(max = 20)
+    @Column(name = "COUNTRY")
+    private String country;
+    @Size(max = 50)
+    @Column(name = "CITY")
+    private String city;
+
+    @OneToMany(mappedBy = "idUser")
+    private List<Wishlist> wishlistList;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -162,6 +172,32 @@ public class Buyer implements Serializable {
     @Override
     public String toString() {
         return "entities.Buyer[ id=" + id + " ]";
+    }
+
+   
+    @XmlTransient
+    public List<Wishlist> getWishlistList() {
+        return wishlistList;
+    }
+
+    public void setWishlistList(List<Wishlist> wishlistList) {
+        this.wishlistList = wishlistList;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
 }

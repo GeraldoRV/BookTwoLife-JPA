@@ -64,10 +64,13 @@
                             <%for (Solicitude elem : solicitudelist) {
                                     if (!elem.getStatus().equals("Compra aprobada")) {
                                         continue;
-                                    }%>
+                                    }
+                            Long nBooks=bf.countWhereSolicitude(elem);
+                            
+                            %>
                             <tr>
                                 <td><%=elem.getId()%></td>
-                                <td><%=elem.getBookList().size()%></td>
+                                <td><%=nBooks%></td>
                                 <td><%=elem.getIdSeller().getFname()%></td>
                                 <td>25€</td>
 
@@ -100,7 +103,7 @@
                                     if (elem.getStatus().equals("Compra aprobada")) {
                                         continue;
                                     }
-                            Long nBooks=bf.countWhereSolicitude(elem);
+                                    Long nBooks = bf.countWhereSolicitude(elem);
                             %>
                             <tr>
                                 <td><%=elem.getId()%></td>

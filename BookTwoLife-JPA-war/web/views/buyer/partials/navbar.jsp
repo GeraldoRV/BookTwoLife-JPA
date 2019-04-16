@@ -18,6 +18,9 @@
         <a class="nav-link" href="/BookTwoLife-JPA-war/views/buyer/cart.jsp">Carrito</a>        
       </li>
       <li class="nav-item">
+        <a class="nav-link" href="/BookTwoLife-JPA-war/views/buyer/wishlist.jsp">Lista de deseos</a>        
+      </li>
+      <li class="nav-item">
         <a class="nav-link" href="/BookTwoLife-JPA-war/views/buyer/solicitudes.jsp">Solicitudes</a>
       </li>
     </ul>

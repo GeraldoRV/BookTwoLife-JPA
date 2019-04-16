@@ -8,6 +8,7 @@ package ejb;
 import entities.Book;
 import entities.Cart;
 import entities.Solicitude;
+import entities.Wishlist;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -49,6 +50,14 @@ public class BookFacade extends AbstractFacade<Book> {
                 .setParameter("id", idBook)
                 .executeUpdate();
     }
+
+    public void addToWishList(Wishlist wishlist, Integer idBook) {
+        em.createQuery("UPDATE Book b SET b.idWishlist =:wishlist WHERE b.id =:id")
+                .setParameter("wishlist", wishlist)
+                .setParameter("id", idBook)
+                .executeUpdate();
+    }
+
     public void addToSolicitude(Solicitude idSolicitude, Integer idBook) {
         em.createQuery("UPDATE Book b SET b.idSolicitude =:idSolicitude, b.idCart = null WHERE b.id =:id")
                 .setParameter("idSolicitude", idSolicitude)
@@ -79,13 +88,14 @@ public class BookFacade extends AbstractFacade<Book> {
     }
 
     public Long countByName(String name) {
-        return  (Long) em.createQuery("SELECT COUNT(b) FROM Book b WHERE b.idCart IS NULL AND b.idSolicitude IS NULL AND b.bname LIKE :name ")
+        return (Long) em.createQuery("SELECT COUNT(b) FROM Book b WHERE b.idCart IS NULL AND b.idSolicitude IS NULL AND b.bname LIKE :name ")
                 .setParameter("name", "%" + name + "%")
                 .getSingleResult();
     }
+
     public Long countWhereSolicitude(Solicitude solicitude) {
-        return  (Long) em.createQuery("SELECT COUNT(b) FROM Book b WHERE b.idSolicitude=:solicitude")
-                .setParameter("solicitude",  solicitude)
+        return (Long) em.createQuery("SELECT COUNT(b) FROM Book b WHERE b.idSolicitude=:solicitude")
+                .setParameter("solicitude", solicitude)
                 .getSingleResult();
     }
 
@@ -103,10 +113,18 @@ public class BookFacade extends AbstractFacade<Book> {
         q.setParameter(p, "%" + name + "%");
         return q.getResultList();
     }
+
     public List<Book> findWhereCart(Cart cart) {
-     return em.createQuery("SELECT b FROM Book b "
+        return em.createQuery("SELECT b FROM Book b "
                 + "WHERE b.idCart =:cart AND b.idSolicitude IS NULL")
-             .setParameter("cart", cart)
-                .getResultList();   
+                .setParameter("cart", cart)
+                .getResultList();
     }
+
+    public List<Book> findWhereWishList(Wishlist wishlist) {
+        return em.createQuery("SELECT b FROM Book b WHERE b.idWishlist=:wishlist AND b.idSolicitude IS NULL")
+                .setParameter("wishlist", wishlist)
+                .getResultList();
+    }
+
 }
