@@ -25,11 +25,15 @@
         <%
             BookFacade bf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/BookFacade!ejb.BookFacade");
             String name = (String) session.getAttribute("bookstofind");
+            String nameC = (String) session.getAttribute("bookstofindcriteria");
             Integer index = (Integer) session.getAttribute("indextofind");
-            if (name == null) {
-                name = (String) session.getAttribute("bookstofindcriteria");
+            List<Book> books;
+            if (name != null) {
+
+                books = bf.findByName(name, index);
+            } else {
+                books = bf.findByNameCriteria(nameC,index);
             }
-            List<Book> books = bf.findByName(name, index);
         %>
         <div class="container py-2">
             <ul class="list-group">
@@ -82,7 +86,7 @@
                     <%
                         Long countByName = (Long) session.getAttribute("indexes");
                         Integer i = 1;
-                        while (countByName >=0) {
+                        while (countByName >= 0) {
                     %>
 
 
@@ -102,7 +106,7 @@
                             countByName--;
                         }
                     %>
-                   
+
                     <li class="page-item">
                         <a class="page-link" href="#" aria-label="Next"><form action="/BookTwoLife-JPA-war/FrontController">
                                 <input type="hidden" name="command" value="NextResultsCommand">

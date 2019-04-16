@@ -99,18 +99,24 @@ public class BookFacade extends AbstractFacade<Book> {
                 .getSingleResult();
     }
 
-    public List<Book> findByNameCriteria(String name) {
+    public List<Book> findByNameCriteria(String name, int index) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Book> cq = cb.createQuery(Book.class);
         Root<Book> book = cq.from(Book.class);
         ParameterExpression<String> p = cb.parameter(String.class);
 
-        cq.select(book).where(cb.like(book.get("bname"), p),
-                cb.isNull(book.get("idCart")),
-                cb.isNull(book.get("idSolicitude")));
+        cq.select(book)
+                .where(
+                        cb.like(book.get("bname"), p),
+                        cb.isNull(book.get("idCart")),
+                        cb.isNull(book.get("idSolicitude"))
+                )
+                .orderBy(cb.asc(book.get("price")));
 
         TypedQuery<Book> q = em.createQuery(cq);
         q.setParameter(p, "%" + name + "%");
+        q.setFirstResult(index);
+        q.setMaxResults(3);
         return q.getResultList();
     }
 

@@ -41,13 +41,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Buyer.findByCity", query = "SELECT b FROM Buyer b WHERE b.address.city = :city")})
 public class Buyer implements Serializable {
 
-    @Size(max = 20)
-    @Column(name = "COUNTRY")
-    private String country;
-    @Size(max = 50)
-    @Column(name = "CITY")
-    private String city;
-
     @OneToMany(mappedBy = "idUser")
     private List<Wishlist> wishlistList;
 
@@ -184,20 +177,5 @@ public class Buyer implements Serializable {
         this.wishlistList = wishlistList;
     }
 
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
+   
 }
