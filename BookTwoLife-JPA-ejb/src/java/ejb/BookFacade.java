@@ -7,6 +7,7 @@ package ejb;
 
 import entities.Book;
 import entities.Cart;
+import entities.Seller;
 import entities.Solicitude;
 import entities.Wishlist;
 import java.util.List;
@@ -138,6 +139,18 @@ public class BookFacade extends AbstractFacade<Book> {
     public void removeAllFromCart(Cart cart) {
       em.createQuery("UPDATE Book b SET b.idCart =null WHERE b.idCart=:cart")
                 .setParameter("cart", cart)
+                .executeUpdate();
+    }
+    
+    public List<Book> findWhereSeller(Seller seller){
+        return em.createQuery("SELECT b FROM Book b  WHERE b.idSeller=:seller")
+                .setParameter("seller", seller)
+                .getResultList();
+    }
+
+    public void delete(Integer id) {
+        em.createQuery("DELETE FROM Book b WHERE b.id=:id")
+                .setParameter("id", id)
                 .executeUpdate();
     }
 

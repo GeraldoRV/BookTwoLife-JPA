@@ -4,6 +4,11 @@
     Author     : Geraldo
 --%>
 
+<%@page import="entities.Seller"%>
+<%@page import="java.util.List"%>
+<%@page import="entities.Book"%>
+<%@page import="ejb.BookFacade"%>
+<%@page import="javax.naming.InitialContext"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -14,30 +19,44 @@
     </head>
     <body>
         <jsp:include page="partials/navbar.jsp" />
+        <%
+            BookFacade bf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/BookFacade!ejb.BookFacade");
+            Seller seller = (Seller) session.getAttribute("userlogin");
+            List<Book> books = bf.findWhereSeller(seller);
+        %>
         <div class="container py-2">
-            <form action="/BookTwoLife-JPA-war/FrontController">
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="name-book">Nombre</label>
-                        <input type="text" name="name" class="form-control" id="name-book" placeholder="Nombre">
+            <table class="table mx-auto">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Genero</th>
+                        <th>Precio</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%
+                        for (Book book : books) {
 
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="genre">Genero</label>
-                        <input type="text" name="genre" class="form-control" id="genre" placeholder="Genero">
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="price">Precio</label>
-                        <input type="text" name="price" class="form-control" id="price" placeholder="Precio">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="description">Descripción</label>
-                    <textarea class="form-control" name="description" id="description" placeholder="Descripcion..." ></textarea>
-                </div>
-                <input type="hidden" name="command" value="CreateBookCommand">
-                <button type="submit" class="btn btn-primary">Nuevo libro</button>
-            </form>
-        </div>
-    </body>
+                    %>
+                    <tr>
+                        <td><%=book.getBname()%></td>
+                        <td><%=book.getGenre()%></td>
+                        <td><%=book.getPrice()%></td>
+                        <td><form action="/BookTwoLife-JPA-war/FrontController">                   
+                                <input type="hidden" name="command" value="DeleteBookCommand">
+                                <input type="hidden" name="name" value="Principito">
+                                <input type="hidden" name="id" value="<%=Integer.toString(book.getId())%>">
+                                <button type="submit" class="btn btn-warning">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <%}%>
+                </tbody>
+            </table>
+
+
+        
+    </div>
+</body>
 </html>

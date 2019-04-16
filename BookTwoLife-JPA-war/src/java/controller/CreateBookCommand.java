@@ -7,10 +7,12 @@ package controller;
 
 import ejb.BookFacade;
 import entities.Seller;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -30,8 +32,12 @@ public class CreateBookCommand extends FrontCommand{
         try {
             BookFacade bf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/BookFacade!ejb.BookFacade");
             bf.createBook(name, description, genre, Double.parseDouble(price), seller.getId()); 
-            
+            forward("/views/seller/main.jsp");
         } catch (NamingException ex) {
+            Logger.getLogger(CreateBookCommand.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServletException ex) {
+            Logger.getLogger(CreateBookCommand.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
             Logger.getLogger(CreateBookCommand.class.getName()).log(Level.SEVERE, null, ex);
         }
         
