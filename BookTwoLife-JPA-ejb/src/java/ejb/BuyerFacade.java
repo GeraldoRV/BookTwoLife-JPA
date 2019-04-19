@@ -30,16 +30,4 @@ public class BuyerFacade extends AbstractFacade<Buyer> {
         super(Buyer.class);
     }
     
-    public Buyer login(String username, String password){
-        Buyer buyer = null;
-        List<Buyer> resultList = em.createQuery("SELECT b FROM Buyer b WHERE b.username =:username AND b.password =:password")
-                .setParameter("username", username)
-                .setParameter("password", password).getResultList();
-        System.out.println(resultList.size());
-        if (!resultList.isEmpty()) {
-            buyer = resultList.get(0);
-        }
-        return buyer;
-    }
-    
 }

@@ -29,17 +29,5 @@ public class SellerFacade extends AbstractFacade<Seller> {
     public SellerFacade() {
         super(Seller.class);
     }
-    public Seller login(String username, String password){
-        Seller seller = null;
-        List<Seller> resultList = em.createQuery("SELECT s FROM Seller s WHERE s.username =:username AND s.password =:password")
-                .setParameter("username", username)
-                .setParameter("password", password).getResultList();
-        System.out.println(resultList.size());
-        if (!resultList.isEmpty()) {
-            seller = resultList.get(0);
-        }
-        return seller;
-    }
-    
     
 }

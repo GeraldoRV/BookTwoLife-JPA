@@ -8,10 +8,12 @@ package controller;
 import ejb.BuyerFacade;
 import ejb.CartFacade;
 import ejb.SellerFacade;
+import ejb.UserAppFacade;
 import ejb.WishlistFacade;
 import entities.Buyer;
 import entities.Cart;
 import entities.Seller;
+import entities.UserApp;
 import entities.Wishlist;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -29,59 +31,24 @@ public class LoginCommand extends FrontCommand {
 
     private String username;
     private String password;
+    private UserApp login;
 
     @Override
     public void process() {
         username = request.getParameter("username");
         password = request.getParameter("password");
-
-        if (username.equals("buyer")) {
-            loginBuyer();
-        } else {
-            loginSeller();
-        }
-
+        login();
+       
     }
-
-    private void loginBuyer() {
-        Buyer buyer;
-        BuyerFacade bf;
-
+    private void login() {
         try {
-            bf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/BuyerFacade!ejb.BuyerFacade");
-            buyer = bf.login(username, password);
-            if (buyer != null) {
-
-                setCart(buyer);
-                setWishList(buyer);
-
-                saveInSession(buyer);
-
-                forward("/views/buyer/main.jsp");
-            } else {
-                forward("/index.jsp");
+            UserAppFacade uf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/UserAppFacade!ejb.UserAppFacade");
+            login = uf.login(username, password);
+            if (login == null) {
+                goTo("index");
             }
-        } catch (ServletException | IOException | NamingException ex) {
-            Logger.getLogger(LoginCommand.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    private void loginSeller() {
-        Seller seller = null;
-        try {
-            SellerFacade sf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/SellerFacade!ejb.SellerFacade");
-            seller = sf.login(username, password);
+            goTo("main");
         } catch (NamingException ex) {
-            Logger.getLogger(LoginCommand.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            if (seller != null) {
-                saveInSession(seller);
-                forward("/views/seller/main.jsp");
-            } else {
-                forward("/index.jsp");
-            }
-        } catch (ServletException | IOException ex) {
             Logger.getLogger(LoginCommand.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -118,9 +85,39 @@ public class LoginCommand extends FrontCommand {
                 Wishlist wishlist = new Wishlist();
                 wishlist.setIdUser(buyer);
                 wf.create(wishlist);
-                
+
             }
         } catch (NamingException ex) {
+            Logger.getLogger(LoginCommand.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+
+    private void goTo(String navigation) {
+        switch (navigation) {
+            case "index":
+                navigate("/index.jsp");
+                break;
+            case "main":
+                if (login instanceof Seller) {
+                    saveInSession(login);
+                    navigate("/views/seller/main.jsp");
+                }
+                Buyer buyer = (Buyer) login;
+                setCart(buyer);
+                setWishList(buyer);
+                saveInSession(buyer);
+                navigate("/views/buyer/main.jsp");
+                break;
+            default:
+                throw new AssertionError();
+        }
+    }
+
+    private void navigate(String target) {
+        try {
+            forward(target);
+        } catch (ServletException | IOException ex) {
             Logger.getLogger(LoginCommand.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
