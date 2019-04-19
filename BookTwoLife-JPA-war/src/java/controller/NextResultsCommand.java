@@ -17,24 +17,30 @@ import javax.servlet.http.HttpSession;
  */
 public class NextResultsCommand extends FrontCommand {
 
+    private HttpSession session;
+
     @Override
     public void process() {
-        HttpSession session = request.getSession();
-        Integer index = (Integer) session.getAttribute("indextofind");
-        Long indexes = (Long) session.getAttribute("indexes");
-        index += 3;
-        int indexMax = indexes.intValue() * 3;
-        System.out.println(indexMax + " max");
-        System.out.println(index + "index");
-        if (index > indexMax) {
-            index = indexMax;
-        }
-        session.setAttribute("indextofind", index);
+        session = request.getSession();
+        calculateNextIndex();
         try {
             forward("/views/buyer/bookstofind.jsp");
         } catch (ServletException | IOException ex) {
             Logger.getLogger(FindBooKCommand.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void calculateNextIndex() {
+        Integer index = (Integer) session.getAttribute("indextofind");
+        Long indexes = (Long) session.getAttribute("indexes");
+        index += 3;
+        int indexMax = indexes.intValue() * 3;
+
+        if (index > indexMax) {
+            index = indexMax;
+        }
+        session.setAttribute("indextofind", index);
+
     }
 
 }

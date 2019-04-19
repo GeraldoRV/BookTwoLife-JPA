@@ -33,26 +33,29 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "MessageConversation.findByMessage", query = "SELECT m FROM MessageConversation m WHERE m.message = :message")})
 public class MessageConversation implements Serializable {
 
-    @JoinColumn(name = "ID_SELLER", referencedColumnName = "ID")
-    @ManyToOne
-    private Seller idSeller;
-    @JoinColumn(name = "ID_BUYER", referencedColumnName = "ID")
-    @ManyToOne
-    private Buyer idBuyer;
-
-   
     private static final long serialVersionUID = 1L;
+   
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "ID")
     private Integer id;
+    
     @Size(max = 70)
     @Column(name = "MESSAGE")
     private String message;
+    
     @JoinColumn(name = "ID_CONVERSATION", referencedColumnName = "ID")
     @ManyToOne(optional = false)
     private Conversation idConversation;
+    
+    @JoinColumn(name = "ID_SELLER", referencedColumnName = "ID")
+    @ManyToOne
+    private Seller idSeller;
+    
+    @JoinColumn(name = "ID_BUYER", referencedColumnName = "ID")
+    @ManyToOne
+    private Buyer idBuyer;
 
     public MessageConversation() {
     }
@@ -110,7 +113,6 @@ public class MessageConversation implements Serializable {
         return "entities.MessageConversation[ id=" + id + " ]";
     }
 
-   
     public Seller getIdSeller() {
         return idSeller;
     }
@@ -126,5 +128,5 @@ public class MessageConversation implements Serializable {
     public void setIdBuyer(Buyer idBuyer) {
         this.idBuyer = idBuyer;
     }
-    
+
 }

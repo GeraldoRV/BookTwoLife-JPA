@@ -20,33 +20,39 @@ import javax.servlet.http.HttpSession;
  */
 public class FindBooKCommand extends FrontCommand {
 
+    private HttpSession session;
+
     @Override
     public void process() {
         String name = request.getParameter("name");
         if (!name.isEmpty()) {
-            HttpSession session = request.getSession();
+            session = request.getSession();
             session.setAttribute("bookstofind", name);
             Integer index = 0;
             session.setAttribute("indextofind", index);
-            try {
-                BookFacade bf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/BookFacade!ejb.BookFacade");
-                Long countByName = bf.countByName(name);
-                System.out.println(countByName + " total");
-                if (countByName > 3) {
-                    countByName /= 3;
-
-                } else {
-                    countByName = 0L;
-                }
-                System.out.println(countByName + " pags");
-                session.setAttribute("indexes", countByName);
-            } catch (NamingException ex) {
-                Logger.getLogger(FindBooKCommand.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            calculateNPags(name);
         }
         try {
             forward("/views/buyer/bookstofind.jsp");
         } catch (ServletException | IOException ex) {
+            Logger.getLogger(FindBooKCommand.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void calculateNPags(String name) {
+        try {
+            BookFacade bf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/BookFacade!ejb.BookFacade");
+            Long countByName = bf.countByName(name);
+
+            if (countByName > 3) {
+                countByName /= 3;
+
+            } else {
+                countByName = 0L;
+            }
+
+            session.setAttribute("indexes", countByName);
+        } catch (NamingException ex) {
             Logger.getLogger(FindBooKCommand.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

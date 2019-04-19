@@ -34,9 +34,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Wishlist.findById", query = "SELECT w FROM Wishlist w WHERE w.id = :id")})
 public class Wishlist implements Serializable {
 
-    @OneToMany(mappedBy = "idWishlist")
-    private List<Book> bookList;
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,6 +43,9 @@ public class Wishlist implements Serializable {
     @JoinColumn(name = "ID_USER", referencedColumnName = "ID")
     @ManyToOne
     private Buyer idUser;
+
+    @OneToMany(mappedBy = "idWishlist")
+    private List<Book> bookList;
 
     public Wishlist() {
     }
@@ -103,5 +103,5 @@ public class Wishlist implements Serializable {
     public void setBookList(List<Book> bookList) {
         this.bookList = bookList;
     }
-    
+
 }

@@ -18,32 +18,20 @@ import javax.servlet.http.HttpSession;
  *
  * @author Geraldo
  */
-public class FindBooKCriteriaCommand extends FrontCommand{
+public class FindBooKCriteriaCommand extends FrontCommand {
+
+    private HttpSession session;
 
     @Override
     public void process() {
         String name = request.getParameter("name");
         if (!name.isEmpty()) {
-            HttpSession session = request.getSession();
+            session = request.getSession();
             session.setAttribute("bookstofindcriteria", name);
             session.setAttribute("bookstofind", null);
             Integer index = 0;
             session.setAttribute("indextofind", index);
-            try {
-                BookFacade bf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/BookFacade!ejb.BookFacade");
-                Long countByName = bf.countByName(name);
-                System.out.println(countByName + " total");
-                if (countByName > 3) {
-                    countByName /= 3;
-
-                } else {
-                    countByName = 0L;
-                }
-                System.out.println(countByName + " pags");
-                session.setAttribute("indexes", countByName);
-            } catch (NamingException ex) {
-                Logger.getLogger(FindBooKCommand.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            calculateNPages(name);
         }
         try {
             forward("/views/buyer/bookstofind.jsp");
@@ -51,5 +39,22 @@ public class FindBooKCriteriaCommand extends FrontCommand{
             Logger.getLogger(FindBooKCommand.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
+    private void calculateNPages(String name) {
+        try {
+            BookFacade bf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/BookFacade!ejb.BookFacade");
+            Long countByName = bf.countByName(name);
+            if (countByName > 3) {
+                countByName /= 3;
+
+            } else {
+                countByName = 0L;
+            }
+            session.setAttribute("indexes", countByName);
+        } catch (NamingException ex) {
+            Logger.getLogger(FindBooKCommand.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
 }

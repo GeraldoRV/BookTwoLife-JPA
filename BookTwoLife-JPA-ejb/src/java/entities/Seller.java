@@ -5,7 +5,6 @@
  */
 package entities;
 
-import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.List;
 import java.util.logging.Level;
@@ -21,7 +20,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -44,9 +42,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Seller.findByPassword", query = "SELECT s FROM Seller s WHERE s.password = :password")})
 public class Seller extends UserApp {
 
-     @OneToMany(mappedBy = "idSeller")
+
+    @OneToMany(mappedBy = "idSeller")
     private List<MessageConversation> messageConversationList;
-   
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idSeller")
     private List<Valoration> valorationList;
@@ -81,11 +79,10 @@ public class Seller extends UserApp {
         this.solicitudeList = solicitudeList;
     }
 
-    
-    public String toXML(){
-         String result="";
+    public String toXML() {
+        String result = "";
         try {
-           
+
             JAXBContext jax = JAXBContext.newInstance(Seller.class);
             Marshaller m = jax.createMarshaller();
 
@@ -117,6 +114,7 @@ public class Seller extends UserApp {
     public void setPackList(List<Pack> packList) {
         this.packList = packList;
     }
+
     @XmlTransient
     public List<MessageConversation> getMessageConversationList() {
         return messageConversationList;
@@ -135,5 +133,5 @@ public class Seller extends UserApp {
         this.conversationList = conversationList;
     }
 
-    
+   
 }

@@ -30,7 +30,8 @@ public class MessageConversationFacade extends AbstractFacade<MessageConversatio
     public MessageConversationFacade() {
         super(MessageConversation.class);
     }
-    public List<MessageConversation> findWhereConver(Conversation conversation){
+
+    public List<MessageConversation> findWhereConver(Conversation conversation) {
         return em.createQuery("SELECT m FROM MessageConversation m WHERE m.idConversation=:conver")
                 .setParameter("conver", conversation)
                 .getResultList();

@@ -7,7 +7,6 @@ package controller;
 
 import ejb.BookFacade;
 import ejb.CartFacade;
-import entities.Book;
 import entities.Buyer;
 import entities.Cart;
 import java.io.IOException;

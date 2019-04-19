@@ -6,7 +6,6 @@
 package controller;
 
 import ejb.BookFacade;
-import ejb.CartFacade;
 import ejb.WishlistFacade;
 import entities.Buyer;
 import entities.Wishlist;

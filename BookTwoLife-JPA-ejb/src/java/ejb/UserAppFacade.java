@@ -5,11 +5,9 @@
  */
 package ejb;
 
-import entities.Seller;
 import entities.UserApp;
 import java.util.List;
 import javax.ejb.Stateless;
-import javax.ejb.LocalBean;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -18,7 +16,7 @@ import javax.persistence.PersistenceContext;
  * @author Geraldo
  */
 @Stateless
-public class UserAppFacade extends AbstractFacade<UserApp>{
+public class UserAppFacade extends AbstractFacade<UserApp> {
 
     @PersistenceContext(unitName = "BookTwoLife-JPA-ejbPU")
     private EntityManager em;
@@ -31,7 +29,8 @@ public class UserAppFacade extends AbstractFacade<UserApp>{
     public UserAppFacade() {
         super(UserApp.class);
     }
-    public UserApp login(String username, String password){
+
+    public UserApp login(String username, String password) {
         UserApp user = null;
         List<UserApp> resultList = em.createQuery("SELECT u FROM UserApp u WHERE u.username =:username AND u.password =:password")
                 .setParameter("username", username)
@@ -42,5 +41,5 @@ public class UserAppFacade extends AbstractFacade<UserApp>{
         }
         return user;
     }
-    
+
 }

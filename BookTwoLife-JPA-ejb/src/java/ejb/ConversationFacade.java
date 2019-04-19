@@ -31,19 +31,19 @@ public class ConversationFacade extends AbstractFacade<Conversation> {
         super(Conversation.class);
     }
 
+    public void insert(Integer buyer, Integer seller) {
+        em.createNativeQuery("INSERT INTO CONVERSATION (ID_SELLER,ID_BUYER) VALUES (?,?)")
+                .setParameter(1, seller)
+                .setParameter(2, buyer)
+                .executeUpdate();
+    }
+
     public Boolean existsBetween(Buyer buyer, Integer seller) {
         List resultList = em.createQuery("SELECT c FROM Conversation c WHERE c.idBuyer=:buyer AND c.idSeller.id=:seller")
                 .setParameter("seller", seller)
                 .setParameter("buyer", buyer)
                 .getResultList();
         return !resultList.isEmpty();
-    }
-
-    public void insert(Integer buyer, Integer seller) {
-        em.createNativeQuery("INSERT INTO CONVERSATION (ID_SELLER,ID_BUYER) VALUES (?,?)")
-                .setParameter(1, seller)
-                .setParameter(2, buyer)
-                .executeUpdate();
     }
 
     public List<Conversation> findWhereBuyer(Buyer buyer) {

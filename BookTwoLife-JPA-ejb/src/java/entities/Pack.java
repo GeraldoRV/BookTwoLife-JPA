@@ -6,7 +6,6 @@
 package entities;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,11 +16,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -33,18 +30,11 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Pack.findAll", query = "SELECT p FROM Pack p")
     , @NamedQuery(name = "Pack.findById", query = "SELECT p FROM Pack p WHERE p.id = :id")
-    , @NamedQuery(name = "Pack.findByFullPrice", query = "SELECT p FROM Pack p WHERE p.fullPrice = :fullPrice")})
+    , @NamedQuery(name = "Pack.findByPname", query = "SELECT p FROM Pack p WHERE p.pname = :pname")
+    , @NamedQuery(name = "Pack.findByDetails", query = "SELECT p FROM Pack p WHERE p.details = :details")
+    , @NamedQuery(name = "Pack.findByFullPrice", query = "SELECT p FROM Pack p WHERE p.fullPrice = :fullPrice")
+    , @NamedQuery(name = "Pack.findByTotalBooks", query = "SELECT p FROM Pack p WHERE p.totalBooks = :totalBooks")})
 public class Pack implements Serializable {
-
-    @Column(name = "TOTAL_BOOKS")
-    private Integer totalBooks;
-
-    @Size(max = 30)
-    @Column(name = "PNAME")
-    private String pname;
-    @Size(max = 255)
-    @Column(name = "DETAILS")
-    private String details;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -52,9 +42,17 @@ public class Pack implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID")
     private Integer id;
+    @Size(max = 30)
+    @Column(name = "PNAME")
+    private String pname;
+    @Size(max = 30)
+    @Column(name = "DETAILS")
+    private String details;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "FULL_PRICE")
     private Double fullPrice;
+    @Column(name = "TOTAL_BOOKS")
+    private Integer totalBooks;
     @JoinColumn(name = "ID_SELLER", referencedColumnName = "ID")
     @ManyToOne
     private Seller idSeller;
@@ -74,6 +72,22 @@ public class Pack implements Serializable {
         this.id = id;
     }
 
+    public String getPname() {
+        return pname;
+    }
+
+    public void setPname(String pname) {
+        this.pname = pname;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
+
     public Double getFullPrice() {
         return fullPrice;
     }
@@ -82,7 +96,13 @@ public class Pack implements Serializable {
         this.fullPrice = fullPrice;
     }
 
-    
+    public Integer getTotalBooks() {
+        return totalBooks;
+    }
+
+    public void setTotalBooks(Integer totalBooks) {
+        this.totalBooks = totalBooks;
+    }
 
     public Seller getIdSeller() {
         return idSeller;
@@ -115,30 +135,6 @@ public class Pack implements Serializable {
     @Override
     public String toString() {
         return "entities.Pack[ id=" + id + " ]";
-    }
-
-    public String getPname() {
-        return pname;
-    }
-
-    public void setPname(String pname) {
-        this.pname = pname;
-    }
-
-    public String getDetails() {
-        return details;
-    }
-
-    public void setDetails(String details) {
-        this.details = details;
-    }
-
-    public Integer getTotalBooks() {
-        return totalBooks;
-    }
-
-    public void setTotalBooks(Integer totalBooks) {
-        this.totalBooks = totalBooks;
     }
     
 }

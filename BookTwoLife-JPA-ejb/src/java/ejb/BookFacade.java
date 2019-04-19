@@ -76,6 +76,12 @@ public class BookFacade extends AbstractFacade<Book> {
                 .executeUpdate();
     }
 
+    public void removeAllFromSolicitude(Integer idSolicitude) {
+        em.createQuery("UPDATE Book b SET b.idSolicitude =null WHERE b.idSolicitude.id=:id")
+                .setParameter("id", idSolicitude)
+                .executeUpdate();
+    }
+
     public List<Book> findWhereCart(Cart cart) {
         return em.createQuery("SELECT b FROM Book b "
                 + "WHERE b.idCart =:cart AND b.idSolicitude IS NULL")
@@ -152,9 +158,4 @@ public class BookFacade extends AbstractFacade<Book> {
                 .getSingleResult();
     }
 
-    public void removeAllFromSolicitude(Integer idSolicitude) {
-       em.createQuery("UPDATE Book b SET b.idSolicitude =null WHERE b.idSolicitude.id=:id")
-                .setParameter("id", idSolicitude)
-                .executeUpdate();
-    }
 }

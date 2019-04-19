@@ -41,39 +41,46 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Book.findByPrice", query = "SELECT b FROM Book b WHERE b.price = :price")})
 public class Book implements Serializable {
 
-    @JoinColumn(name = "ID_WISHLIST", referencedColumnName = "ID")
-    @ManyToOne
-    private Wishlist idWishlist;
-
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "ID")
     private Integer id;
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
     @Column(name = "BNAME")
     private String bname;
+
     @Size(max = 1000)
     @Column(name = "DESCRIPTION")
     private String description;
+
     @Size(max = 20)
     @Column(name = "GENRE")
     private String genre;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "PRICE")
     private Double price;
+
     @JoinColumn(name = "ID_CART", referencedColumnName = "ID")
     @ManyToOne
     private Cart idCart;
+
     @JoinColumn(name = "ID_SELLER", referencedColumnName = "ID")
     @ManyToOne(optional = false)
     private Seller idSeller;
+
     @JoinColumn(name = "ID_SOLICITUDE", referencedColumnName = "ID")
     @ManyToOne
     private Solicitude idSolicitude;
+
+    @JoinColumn(name = "ID_WISHLIST", referencedColumnName = "ID")
+    @ManyToOne
+    private Wishlist idWishlist;
 
     public Book() {
     }
@@ -151,6 +158,14 @@ public class Book implements Serializable {
         this.idSolicitude = idSolicitude;
     }
 
+    public Wishlist getIdWishlist() {
+        return idWishlist;
+    }
+
+    public void setIdWishlist(Wishlist idWishlist) {
+        this.idWishlist = idWishlist;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -171,7 +186,7 @@ public class Book implements Serializable {
         return true;
     }
 
-    public String toXml(){
+    public String toXml() {
         StringWriter result = new StringWriter();
         try {
             JAXBContext jax = JAXBContext.newInstance(Book.class);
@@ -186,18 +201,10 @@ public class Book implements Serializable {
         }
         return result.toString();
     }
+
     @Override
     public String toString() {
         return "entities.Book[ id=" + id + " ]";
     }
 
-    public Wishlist getIdWishlist() {
-        return idWishlist;
-    }
-
-    public void setIdWishlist(Wishlist idWishlist) {
-        this.idWishlist = idWishlist;
-    }
-
-    
 }

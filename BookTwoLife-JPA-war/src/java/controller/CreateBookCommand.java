@@ -31,13 +31,10 @@ public class CreateBookCommand extends FrontCommand{
         String description = request.getParameter("description");
         try {
             BookFacade bf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/BookFacade!ejb.BookFacade");
+            
             bf.createBook(name, description, genre, Double.parseDouble(price), seller.getId()); 
             forward("/views/seller/main.jsp");
-        } catch (NamingException ex) {
-            Logger.getLogger(CreateBookCommand.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServletException ex) {
-            Logger.getLogger(CreateBookCommand.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        } catch (NamingException | ServletException | IOException ex) {
             Logger.getLogger(CreateBookCommand.class.getName()).log(Level.SEVERE, null, ex);
         }
         

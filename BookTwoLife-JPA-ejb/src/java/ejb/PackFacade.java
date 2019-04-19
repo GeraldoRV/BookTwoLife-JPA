@@ -17,7 +17,7 @@ import javax.persistence.PersistenceContext;
 @Stateless
 public class PackFacade extends AbstractFacade<Pack> {
 
-        @PersistenceContext(unitName = "BookTwoLife-JPA-ejbPU")
+    @PersistenceContext(unitName = "BookTwoLife-JPA-ejbPU")
     private EntityManager em;
 
     @Override

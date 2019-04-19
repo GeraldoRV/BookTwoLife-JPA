@@ -5,22 +5,14 @@
  */
 package entities;
 
-import java.io.Serializable;
 import java.util.List;
-import javax.persistence.Basic;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -39,30 +31,32 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Buyer.findByPassword", query = "SELECT b FROM Buyer b WHERE b.password = :password")
     , @NamedQuery(name = "Buyer.findByCountry", query = "SELECT b FROM Buyer b WHERE b.address.country = :country")
     , @NamedQuery(name = "Buyer.findByCity", query = "SELECT b FROM Buyer b WHERE b.address.city = :city")})
-public class Buyer extends UserApp  {
+public class Buyer extends UserApp {
 
+    @Embedded
+    private Address address;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idBuyer")
+    private List<Solicitude> solicitudeList;
+    
+    @OneToMany(mappedBy = "idUser")
+    private List<Cart> cartList;
+    
     @OneToMany(mappedBy = "idBuyer")
     private List<MessageConversation> messageConversationList1;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idBuyer")
     private List<Valoration> valorationList;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idBuyer")
     private List<Conversation> conversationList;
 
     @OneToMany(mappedBy = "idUser")
     private List<Wishlist> wishlistList;
 
-    @Embedded
-    private Address address;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idBuyer")
-    private List<Solicitude> solicitudeList;
-    @OneToMany(mappedBy = "idUser")
-    private List<Cart> cartList;
-
     public Buyer() {
     }
 
-    
     public Address getAddress() {
         return address;
     }
@@ -71,7 +65,7 @@ public class Buyer extends UserApp  {
         this.address = address;
     }
 
- @XmlTransient
+    @XmlTransient
     public List<Solicitude> getSolicitudeList() {
         return solicitudeList;
     }
@@ -88,7 +82,7 @@ public class Buyer extends UserApp  {
     public void setCartList(List<Cart> cartList) {
         this.cartList = cartList;
     }
-   
+
     @XmlTransient
     public List<Wishlist> getWishlistList() {
         return wishlistList;
@@ -98,8 +92,6 @@ public class Buyer extends UserApp  {
         this.wishlistList = wishlistList;
     }
 
-  
-  
     @XmlTransient
     public List<Valoration> getValorationList() {
         return valorationList;
@@ -118,7 +110,6 @@ public class Buyer extends UserApp  {
         this.conversationList = conversationList;
     }
 
-    
     @XmlTransient
     public List<MessageConversation> getMessageConversationList1() {
         return messageConversationList1;
@@ -128,5 +119,4 @@ public class Buyer extends UserApp  {
         this.messageConversationList1 = messageConversationList1;
     }
 
-    
 }

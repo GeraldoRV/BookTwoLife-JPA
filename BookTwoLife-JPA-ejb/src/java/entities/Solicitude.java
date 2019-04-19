@@ -126,5 +126,5 @@ public class Solicitude implements Serializable {
     public String toString() {
         return "entities.Solicitude[ id=" + id + " ]";
     }
-    
+
 }

@@ -24,8 +24,10 @@ public class ChangeSolicitudeCommand extends FrontCommand {
         try {
             String id = request.getParameter("id");
             String status = request.getParameter("status");
+            
             SolicitudeFacade sf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/SolicitudeFacade!ejb.SolicitudeFacade");
             sf.updateStatus(Integer.parseInt(id), status);
+            
             forward("/views/seller/solicitude.jsp");
         } catch (NamingException | ServletException | IOException ex) {
             Logger.getLogger(ChangeSolicitudeCommand.class.getName()).log(Level.SEVERE, null, ex);

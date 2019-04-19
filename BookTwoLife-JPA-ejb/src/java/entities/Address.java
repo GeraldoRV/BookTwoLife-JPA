@@ -16,6 +16,7 @@ import javax.validation.constraints.Size;
  */
 @Embeddable
 public class Address implements Serializable {
+
     @Size(max = 20)
     @Column(name = "COUNTRY")
     private String country;
@@ -38,5 +39,5 @@ public class Address implements Serializable {
     public void setCity(String city) {
         this.city = city;
     }
-    
+
 }

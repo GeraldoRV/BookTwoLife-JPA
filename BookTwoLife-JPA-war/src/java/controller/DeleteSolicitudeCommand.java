@@ -25,8 +25,10 @@ public class DeleteSolicitudeCommand extends FrontCommand {
         try {
             String id = request.getParameter("id");
             Integer idSolicitude = Integer.parseInt(id);
+            
             BookFacade bf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/BookFacade!ejb.BookFacade");
             SolicitudeFacade sf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/SolicitudeFacade!ejb.SolicitudeFacade");
+            
             bf.removeAllFromSolicitude(idSolicitude);
             sf.delete(idSolicitude);
             forward("/views/seller/solicitude.jsp");

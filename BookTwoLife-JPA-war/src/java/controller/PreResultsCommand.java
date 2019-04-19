@@ -17,9 +17,21 @@ import javax.servlet.http.HttpSession;
  */
 public class PreResultsCommand extends FrontCommand {
 
+    private HttpSession session;
+
     @Override
     public void process() {
-        HttpSession session = request.getSession();
+        session = request.getSession();
+        calculatePrevIndex();
+
+        try {
+            forward("/views/buyer/bookstofind.jsp");
+        } catch (ServletException | IOException ex) {
+            Logger.getLogger(FindBooKCommand.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void calculatePrevIndex() {
         Integer index = (Integer) session.getAttribute("indextofind");
 
         index -= 3;
@@ -27,11 +39,6 @@ public class PreResultsCommand extends FrontCommand {
             index = 0;
         }
         session.setAttribute("indextofind", index);
-        try {
-            forward("/views/buyer/bookstofind.jsp");
-        } catch (ServletException | IOException ex) {
-            Logger.getLogger(FindBooKCommand.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
 }

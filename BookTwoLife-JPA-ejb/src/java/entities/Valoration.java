@@ -123,5 +123,5 @@ public class Valoration implements Serializable {
     public String toString() {
         return "entities.Valoration[ id=" + id + " ]";
     }
-    
+
 }

@@ -43,5 +43,5 @@ public class WishlistFacade extends AbstractFacade<Wishlist> {
                 .getResultList();
         return !resultList.isEmpty();
     }
-    
+
 }

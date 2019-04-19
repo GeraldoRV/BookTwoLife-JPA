@@ -25,26 +25,34 @@ import javax.servlet.http.HttpSession;
 public class SendMessageCommand extends FrontCommand {
 
     private HttpSession session;
+    private Buyer buyer;
 
     @Override
     public void process() {
         try {
             session = request.getSession(true);
-            Buyer buyer = (Buyer) session.getAttribute("userlogin");
+            buyer = (Buyer) session.getAttribute("userlogin");
             String message = request.getParameter("message");
             String idConversation = request.getParameter("id");
-             ConversationFacade cf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/ConversationFacade!ejb.ConversationFacade");
+            createMessage(message, idConversation);
+
+            forward("/views/buyer/chat.jsp");
+        } catch (ServletException | IOException ex) {
+            Logger.getLogger(SendMessageCommand.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void createMessage(String message, String idConversation) {
+        try {
+            ConversationFacade cf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/ConversationFacade!ejb.ConversationFacade");
             Conversation conversation = cf.find(Integer.parseInt(idConversation));
             MessageConversationFacade mcf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/MessageConversationFacade!ejb.MessageConversationFacade");
-            MessageConversation messageConver= new MessageConversation();
+            MessageConversation messageConver = new MessageConversation();
             messageConver.setIdConversation(conversation);
             messageConver.setMessage(message);
             messageConver.setIdBuyer(buyer);
             mcf.create(messageConver);
-            
-           
-            forward("/views/buyer/chat.jsp");
-        } catch (NamingException | ServletException | IOException ex) {
+        } catch (NamingException ex) {
             Logger.getLogger(SendMessageCommand.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

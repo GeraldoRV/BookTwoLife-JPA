@@ -5,9 +5,7 @@
  */
 package controller;
 
-import ejb.BuyerFacade;
 import ejb.CartFacade;
-import ejb.SellerFacade;
 import ejb.UserAppFacade;
 import ejb.WishlistFacade;
 import entities.Buyer;
@@ -40,6 +38,7 @@ public class LoginCommand extends FrontCommand {
         login();
        
     }
+   
     private void login() {
         try {
             UserAppFacade uf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/UserAppFacade!ejb.UserAppFacade");
