@@ -83,6 +83,11 @@
                                 <input type="hidden" name="id" value="{idSeller/id}"/>
                                 <button type="submit" class="btn btn-warning">Información del vendedor</button>
                             </form>
+                            <form action="/BookTwoLife-JPA-war/FrontController">                   
+                                <input type="hidden" name="command" value="OpenConversationCommand"/>
+                                <input type="hidden" name="id" value="{idSeller/id}"/>
+                                <button type="submit" class="btn btn-warning">Contactar con el vendedor</button>
+                            </form>
                         
                         </div>
                         

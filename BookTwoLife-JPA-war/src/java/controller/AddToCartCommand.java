@@ -49,8 +49,6 @@ public class AddToCartCommand extends FrontCommand {
             
             Cart cart = cf.findWhereBuyer(buyer);
             bf.addToCart(cart, Integer.parseInt(idBook));
-            Book find = bf.find(Integer.parseInt(idBook));
-            System.out.println(find.toXml());
             updatePrice(cart);
         } catch (NamingException ex) {
             Logger.getLogger(AddToCartCommand.class.getName()).log(Level.SEVERE, null, ex);
