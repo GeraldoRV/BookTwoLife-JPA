@@ -25,6 +25,7 @@
         List<Book> books =bf.findWhereNotCart();
         %>
         <div class="container py-2">
+            <a href="/BookTwoLife-JPA-war/views/buyer/packs.jsp"><button class="btn btn-warning">Ver Paquetes</button></a>
             <ul class="list-group">
                 <%
                 for (Book book : books) {

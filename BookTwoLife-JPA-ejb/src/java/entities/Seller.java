@@ -45,6 +45,13 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Seller extends UserApp {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idSeller")
+    private List<Valoration> valorationList;
+    @OneToMany(mappedBy = "idSeller")
+    private List<Pack> packList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idSeller")
+    private List<Conversation> conversationList;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idSeller")
     private List<Book> bookList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idSeller")
     private List<Solicitude> solicitudeList;
@@ -88,5 +95,33 @@ public class Seller extends UserApp {
         }
         return result;
     }
+
+    @XmlTransient
+    public List<Valoration> getValorationList() {
+        return valorationList;
+    }
+
+    public void setValorationList(List<Valoration> valorationList) {
+        this.valorationList = valorationList;
+    }
+
+    @XmlTransient
+    public List<Pack> getPackList() {
+        return packList;
+    }
+
+    public void setPackList(List<Pack> packList) {
+        this.packList = packList;
+    }
+
+    @XmlTransient
+    public List<Conversation> getConversationList() {
+        return conversationList;
+    }
+
+    public void setConversationList(List<Conversation> conversationList) {
+        this.conversationList = conversationList;
+    }
+
     
 }

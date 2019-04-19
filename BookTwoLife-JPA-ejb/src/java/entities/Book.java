@@ -198,5 +198,6 @@ public class Book implements Serializable {
     public void setIdWishlist(Wishlist idWishlist) {
         this.idWishlist = idWishlist;
     }
+
     
 }

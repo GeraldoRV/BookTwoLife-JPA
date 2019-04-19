@@ -17,6 +17,9 @@
       <li class="nav-item">
         <a class="nav-link" href="/BookTwoLife-JPA-war/views/seller/addbook.jsp">Añadir un libro</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/BookTwoLife-JPA-war/views/seller/addpack.jsp">Añadir un pack</a>
+      </li>
     </ul>
   </div>
 </nav>

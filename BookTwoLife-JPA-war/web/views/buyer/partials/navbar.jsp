@@ -18,10 +18,13 @@
         <a class="nav-link" href="/BookTwoLife-JPA-war/views/buyer/cart.jsp">Carrito</a>        
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/BookTwoLife-JPA-war/views/buyer/wishlist.jsp">Lista de deseos</a>        
+        <a class="nav-link" href="/BookTwoLife-JPA-war/views/buyer/wishlist.jsp">Deseos</a>        
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/BookTwoLife-JPA-war/views/buyer/solicitudes.jsp">Solicitudes</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/BookTwoLife-JPA-war/views/buyer/chat.jsp">Conversaciones</a>
       </li>
     </ul>
       <form action="/BookTwoLife-JPA-war/FrontController" class="form-inline mx-auto">
