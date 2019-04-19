@@ -14,8 +14,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.validation.constraints.NotNull;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -31,30 +34,23 @@ public class UserApp implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID")
     private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 50)
+    @Size(max = 255)
     @Column(name = "FNAME")
     private String fname;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 20)
-    @Column(name = "USERNAME")
-    private String username;
-    @Size(max = 20)
+    @Size(max = 255)
     @Column(name = "PASSWORD")
     private String password;
+    @Size(max = 255)
+    @Column(name = "USERNAME")
+    private String username;
 
     public UserApp() {
     }
 
-    public UserApp(String fname, String username, String password) {
-        this.fname = fname;
-        this.username = username;
-        this.password = password;
+    public UserApp(Integer id) {
+        this.id = id;
     }
-    
-    
+
     public Integer getId() {
         return id;
     }
@@ -71,14 +67,6 @@ public class UserApp implements Serializable {
         this.fname = fname;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -86,7 +74,14 @@ public class UserApp implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-    
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     @Override
     public int hashCode() {
@@ -102,12 +97,15 @@ public class UserApp implements Serializable {
             return false;
         }
         UserApp other = (UserApp) object;
-        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString() {
-        return "entities.UserApp[ id=" + id + " ]";
+        return "entities.Userapp[ id=" + id + " ]";
     }
     
 }

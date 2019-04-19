@@ -44,6 +44,10 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Seller.findByPassword", query = "SELECT s FROM Seller s WHERE s.password = :password")})
 public class Seller extends UserApp {
 
+     @OneToMany(mappedBy = "idSeller")
+    private List<MessageConversation> messageConversationList;
+   
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idSeller")
     private List<Valoration> valorationList;
     @OneToMany(mappedBy = "idSeller")
@@ -112,6 +116,14 @@ public class Seller extends UserApp {
 
     public void setPackList(List<Pack> packList) {
         this.packList = packList;
+    }
+    @XmlTransient
+    public List<MessageConversation> getMessageConversationList() {
+        return messageConversationList;
+    }
+
+    public void setMessageConversationList(List<MessageConversation> messageConversationList) {
+        this.messageConversationList = messageConversationList;
     }
 
     @XmlTransient

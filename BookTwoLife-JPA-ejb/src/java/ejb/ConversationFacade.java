@@ -53,4 +53,11 @@ public class ConversationFacade extends AbstractFacade<Conversation> {
                 .getResultList();
                 
     }
+
+    public Integer getIdConversation(Integer id, Integer idSeller) {
+       return (Integer) em.createQuery("SELECT c.id FROM Conversation c WHERE c.idBuyer.id=:idBuyer AND c.idSeller.id=:idSeller")
+               .setParameter("idBuyer", id)
+               .setParameter("idSeller", idSeller)
+               .getSingleResult();
+    }
 }

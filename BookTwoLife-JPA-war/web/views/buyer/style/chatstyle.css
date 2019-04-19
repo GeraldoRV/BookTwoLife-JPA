@@ -1,0 +1,15 @@
+.message {
+    position: relative;
+    height: 500px;
+}
+.input-mess {
+    position: absolute;
+    bottom: 0;
+    width: inherit
+}
+.msg-group{
+        position: absolute;
+        width: inherit;
+        height: 65%;
+        overflow-y: scroll;  
+}

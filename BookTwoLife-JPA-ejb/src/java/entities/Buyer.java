@@ -41,6 +41,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Buyer.findByCity", query = "SELECT b FROM Buyer b WHERE b.address.city = :city")})
 public class Buyer extends UserApp  {
 
+    @OneToMany(mappedBy = "idBuyer")
+    private List<MessageConversation> messageConversationList1;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idBuyer")
     private List<Valoration> valorationList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idBuyer")
@@ -115,6 +118,15 @@ public class Buyer extends UserApp  {
         this.conversationList = conversationList;
     }
 
-   
-   
+    
+    @XmlTransient
+    public List<MessageConversation> getMessageConversationList1() {
+        return messageConversationList1;
+    }
+
+    public void setMessageConversationList1(List<MessageConversation> messageConversationList1) {
+        this.messageConversationList1 = messageConversationList1;
+    }
+
+    
 }

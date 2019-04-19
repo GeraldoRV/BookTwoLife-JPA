@@ -33,6 +33,14 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "MessageConversation.findByMessage", query = "SELECT m FROM MessageConversation m WHERE m.message = :message")})
 public class MessageConversation implements Serializable {
 
+    @JoinColumn(name = "ID_SELLER", referencedColumnName = "ID")
+    @ManyToOne
+    private Seller idSeller;
+    @JoinColumn(name = "ID_BUYER", referencedColumnName = "ID")
+    @ManyToOne
+    private Buyer idBuyer;
+
+   
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -100,6 +108,23 @@ public class MessageConversation implements Serializable {
     @Override
     public String toString() {
         return "entities.MessageConversation[ id=" + id + " ]";
+    }
+
+   
+    public Seller getIdSeller() {
+        return idSeller;
+    }
+
+    public void setIdSeller(Seller idSeller) {
+        this.idSeller = idSeller;
+    }
+
+    public Buyer getIdBuyer() {
+        return idBuyer;
+    }
+
+    public void setIdBuyer(Buyer idBuyer) {
+        this.idBuyer = idBuyer;
     }
     
 }

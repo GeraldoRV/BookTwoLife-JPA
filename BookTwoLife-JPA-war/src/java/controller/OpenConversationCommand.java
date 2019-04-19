@@ -26,13 +26,16 @@ public class OpenConversationCommand extends FrontCommand{
     public void process() {
         HttpSession session = request.getSession();
         Buyer buyer = (Buyer) session.getAttribute("userlogin");
+            String parameter = request.getParameter("id");
+        Integer idSeller = Integer.parseInt(parameter);
                
         try {
-            String idSeller = request.getParameter("id");
             ConversationFacade cf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/ConversationFacade!ejb.ConversationFacade");
-            if (!cf.existsBetween(buyer, Integer.parseInt(idSeller))) {
-                cf.insert(buyer.getId(),Integer.parseInt(idSeller));    
+            if (!cf.existsBetween(buyer, idSeller)) {
+                cf.insert(buyer.getId(),idSeller);    
             }
+            Integer idConversation = cf.getIdConversation(buyer.getId(),idSeller);
+            session.setAttribute("actualconver", idConversation);
             forward("/views/buyer/chat.jsp");
         } catch (NamingException | ServletException | IOException ex) {
             Logger.getLogger(OpenConversationCommand.class.getName()).log(Level.SEVERE, null, ex);
