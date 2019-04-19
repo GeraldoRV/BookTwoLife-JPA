@@ -44,7 +44,7 @@ public class SendSolicitudeCommand extends FrontCommand {
             sf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/SolicitudeFacade!ejb.SolicitudeFacade");
 
             Cart cart = cf.findWhereBuyer(buyer);
-            List<entities.Book> bookList =bf.findWhereCart(cart);
+            List<Book> bookList =bf.findWhereCart(cart);
 
             for (Book book : bookList) {
                 insertInSolicitude(book);

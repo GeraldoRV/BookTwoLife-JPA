@@ -20,6 +20,9 @@
       <li class="nav-item">
         <a class="nav-link" href="/BookTwoLife-JPA-war/views/seller/addpack.jsp">Añadir un pack</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/BookTwoLife-JPA-war/views/seller/solicitude.jsp">Solicitudes</a>
+      </li>
     </ul>
   </div>
 </nav>

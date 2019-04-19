@@ -151,4 +151,10 @@ public class BookFacade extends AbstractFacade<Book> {
                 .setParameter("solicitude", solicitude)
                 .getSingleResult();
     }
+
+    public void removeAllFromSolicitude(Integer idSolicitude) {
+       em.createQuery("UPDATE Book b SET b.idSolicitude =null WHERE b.idSolicitude.id=:id")
+                .setParameter("id", idSolicitude)
+                .executeUpdate();
+    }
 }

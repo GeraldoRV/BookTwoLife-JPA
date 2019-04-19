@@ -7,7 +7,6 @@ package controller;
 
 import ejb.ConversationFacade;
 import entities.Buyer;
-import entities.Conversation;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;

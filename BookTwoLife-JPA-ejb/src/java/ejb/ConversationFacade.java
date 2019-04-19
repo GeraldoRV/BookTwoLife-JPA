@@ -7,10 +7,8 @@ package ejb;
 
 import entities.Buyer;
 import entities.Conversation;
-import entities.Seller;
 import java.util.List;
 import javax.ejb.Stateless;
-import javax.ejb.LocalBean;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -42,22 +40,23 @@ public class ConversationFacade extends AbstractFacade<Conversation> {
     }
 
     public void insert(Integer buyer, Integer seller) {
-       em.createNativeQuery("INSERT INTO CONVERSATION (ID_SELLER,ID_BUYER) VALUES (?,?)")
-               .setParameter(1, seller)
-               .setParameter(2, buyer)
-               .executeUpdate();
+        em.createNativeQuery("INSERT INTO CONVERSATION (ID_SELLER,ID_BUYER) VALUES (?,?)")
+                .setParameter(1, seller)
+                .setParameter(2, buyer)
+                .executeUpdate();
     }
-    public List<Conversation> findWhereBuyer(Buyer buyer){
+
+    public List<Conversation> findWhereBuyer(Buyer buyer) {
         return em.createQuery("SELECT c FROM Conversation c WHERE c.idBuyer=:buyer")
                 .setParameter("buyer", buyer)
                 .getResultList();
-                
+
     }
 
     public Integer getIdConversation(Integer id, Integer idSeller) {
-       return (Integer) em.createQuery("SELECT c.id FROM Conversation c WHERE c.idBuyer.id=:idBuyer AND c.idSeller.id=:idSeller")
-               .setParameter("idBuyer", id)
-               .setParameter("idSeller", idSeller)
-               .getSingleResult();
+        return (Integer) em.createQuery("SELECT c.id FROM Conversation c WHERE c.idBuyer.id=:idBuyer AND c.idSeller.id=:idSeller")
+                .setParameter("idBuyer", id)
+                .setParameter("idSeller", idSeller)
+                .getSingleResult();
     }
 }
