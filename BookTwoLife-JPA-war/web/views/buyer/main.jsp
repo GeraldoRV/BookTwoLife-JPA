@@ -21,19 +21,27 @@
     <body>
         <jsp:include page="partials/navbar.jsp" />
         <%
-        BookFacade bf= InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/BookFacade!ejb.BookFacade");
-        List<Book> books =bf.findWhereNotCart();
+            BookFacade bf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/BookFacade!ejb.BookFacade");
+            List<Book> books = bf.findWhereNotCart();
         %>
         <div class="container py-2">
             <a href="/BookTwoLife-JPA-war/views/buyer/packs.jsp"><button class="btn btn-warning">Ver Paquetes</button></a>
             <ul class="list-group">
                 <%
-                for (Book book : books) {
-                        
-                    
+                    for (Book book : books) {
+
                 %>
                 <li class="list-group-item group-item">
+                    <%if (book.getBname().equals("50 Sombras de Grey")) {
+
+                    %>
+                    <div class="image"><img src="/BookTwoLife-JPA-war/images/sombras.jpg" width="80" alt="princ"/></div>
+                    <% } else {
+                    %>
                     <div class="image"><img src="/BookTwoLife-JPA-war/images/princ.jpg" width="80"  alt="princ"/></div>
+                    <%
+                        }
+                    %>
                     <div class="data">
                         <h5><%=book.getBname()%></h5> 
                         <p><%=book.getDescription()%></p>
@@ -63,7 +71,7 @@
                     </div>
                 </li>
                 <%}%>
-                
+
             </ul>
         </div>
     </body>

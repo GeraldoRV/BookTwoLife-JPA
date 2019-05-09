@@ -24,5 +24,9 @@
         <a class="nav-link" href="/BookTwoLife-JPA-war/views/seller/solicitude.jsp">Solicitudes</a>
       </li>
     </ul>
+      <form action="/BookTwoLife-JPA-war/FrontController" class="form-inline mx-auto">
+            <input type="hidden" name="command" value="LogoutCommand">
+            <button class="btn btn-warning" type="submit">Cerrar sesión</button>
+        </form>
   </div>
 </nav>

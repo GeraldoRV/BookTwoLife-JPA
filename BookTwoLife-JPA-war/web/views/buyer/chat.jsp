@@ -29,9 +29,10 @@
             Integer idConversation = (Integer) session.getAttribute("actualconver");
             ConversationFacade cf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/ConversationFacade!ejb.ConversationFacade");
             List<Conversation> conversations = cf.findWhereBuyer(buyer);
-            Conversation actual = null;
+            Conversation actual =null;
+            if(!conversations.isEmpty()) actual = conversations.get(0);
         %>
-        <div class="container">
+        <div class="container py-2">
             <div class="row">
                 <div class="col-3"><h2>Conversaciones</h2>
                     <div class="list-group">
@@ -43,20 +44,17 @@
 
 
                         %>
-                        <a href="#" class="list-group-item list-group-item-action active">
+                        <a href="#" class="list-group-item list-group-item-action">
                             <%=conversation.getIdSeller().getFname()%>
                         </a>
                         <%}%>
-                        <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
-                        <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
-                        <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a>
-                        <a href="#" class="list-group-item list-group-item-action disabled" tabindex="-1" aria-disabled="true">Vestibulum at eros</a>
+                       
                     </div>
                 </div>
                 <%if (actual != null) {
 
                 %>
-                <div class="col message"><h2>Conversacion con <%=actual.getIdSeller().getFname()%></h2>
+                <div class="col message"><h2>Conversación con <%=actual.getIdSeller().getFname()%></h2>
                     <div class="msg-group center">
                         <%
                             MessageConversationFacade mcf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/MessageConversationFacade!ejb.MessageConversationFacade");
@@ -89,11 +87,11 @@
                     <div class="input-mess">
 
                         <form action="/BookTwoLife-JPA-war/FrontController">
-                            <textarea name="message" id="input-box" class="form-control" rows="1" placeholder="Say something..."></textarea>
+                            <textarea name="message" id="input-box" class="form-control" rows="1" placeholder="Escribe algo..."></textarea>
                             <input type="hidden" name="command" value="SendMessageCommand">
                             <input type="hidden" name="id" value="<%=actual.getId()%>">
                             <span class="input-group-btn">
-                                <button class="btn btn-secondary" type="commit">send</button>
+                                <button class="btn btn-warning" type="commit">Enviar</button>
                             </span>
                         </form>
                     </div>

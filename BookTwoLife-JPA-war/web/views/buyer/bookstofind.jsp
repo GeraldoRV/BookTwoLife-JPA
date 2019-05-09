@@ -32,7 +32,7 @@
 
                 books = bf.findByName(name, index);
             } else {
-                books = bf.findByNameCriteria(nameC,index);
+                books = bf.findByNameCriteria(nameC, index);
             }
         %>
         <div class="container py-2">
@@ -40,10 +40,18 @@
                 <%
                     for (Book book : books) {
 
-
                 %>
                 <li class="list-group-item group-item">
+                    <%if (book.getBname().equals("50 Sombras de Grey")) {
+
+                    %>
+                    <div class="image"><img src="/BookTwoLife-JPA-war/images/sombras.jpg" width="80"  alt="princ"/></div>
+                        <% } else {
+                        %>
                     <div class="image"><img src="/BookTwoLife-JPA-war/images/princ.jpg" width="80"  alt="princ"/></div>
+                        <%
+                            }
+                        %>
                     <div class="data">
                         <h5><%=book.getBname()%></h5> 
                         <p><%=book.getDescription()%></p>
@@ -53,7 +61,7 @@
                     <div class="button">
                         <form action="/BookTwoLife-JPA-war/FrontController">                   
                             <input type="hidden" name="command" value="TransformViewCommand">
-                            <input type="hidden" name="name" value="Principito">
+                            <input type="hidden" name="id" value="<%=Integer.toString(book.getId())%>">
                             <button type="submit" class="btn btn-outline-warning">Ver detalles</button>
                         </form>
                         <form action="/BookTwoLife-JPA-war/FrontController">                   

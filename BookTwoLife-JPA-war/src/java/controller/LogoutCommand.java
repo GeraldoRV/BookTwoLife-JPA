@@ -9,6 +9,7 @@ import ejb.BookFacade;
 import ejb.CartFacade;
 import entities.Buyer;
 import entities.Cart;
+import entities.UserApp;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,17 +28,22 @@ public class LogoutCommand extends FrontCommand {
     public void process() {
         try {
             HttpSession session = request.getSession(true);
-            Buyer buyer = (Buyer) session.getAttribute("userlogin");
-            deleteCart(buyer);
+            UserApp user = (UserApp) session.getAttribute("userlogin");
             
+            if (user instanceof Buyer) {
+                deleteCart(user);
+            }
+            
+            session.removeAttribute("userlogin");
             forward("/index.jsp");
         } catch (ServletException | IOException ex) {
             Logger.getLogger(LogoutCommand.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private void deleteCart(Buyer buyer) {
+    private void deleteCart(UserApp user) {
         try {
+            Buyer buyer = (Buyer) user;
             BookFacade bf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/BookFacade!ejb.BookFacade");
             CartFacade cf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/CartFacade!ejb.CartFacade");
             Cart cart = cf.findWhereBuyer(buyer);

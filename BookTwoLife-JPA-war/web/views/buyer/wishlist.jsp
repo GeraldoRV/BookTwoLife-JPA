@@ -28,7 +28,6 @@
             BookFacade bf = InitialContext.doLookup("java:global/BookTwoLife-JPA/BookTwoLife-JPA-ejb/BookFacade!ejb.BookFacade");
             Wishlist wishlist = wf.findWhereBuyer(buyer);
             if (wishlist != null) {
-                //cart = cf.find(cart.getId());
                 List<Book> books = bf.findWhereWishList(wishlist);
         %>
         <div class="container py-2">
@@ -50,6 +49,7 @@
                         <form action="/BookTwoLife-JPA-war/FrontController">                   
                             <input type="hidden" name="command" value="TransformViewCommand">
                             <input type="hidden" name="name" value="Principito">
+                            <input type="hidden" name="id" value="<%=Integer.toString(book.getId())%>">
                             <button type="submit" class="btn btn-outline-warning">Ver detalles</button>
                         </form>
                         <form action="/BookTwoLife-JPA-war/FrontController">                   
@@ -64,9 +64,6 @@
                 <%}%>
                 
             </ul> 
-            <% } else {
-            %> 
-            <h1>Carrito Vacío</h1>    
             <%}%>
         </div>
 
